@@ -8,26 +8,26 @@ import {AfterViewInit, Component, Input} from '@angular/core';
 export class AppComponent implements AfterViewInit {
   title = 'pizza-calculator';
 
-  private adultCount: number = 2;
-  private adultWeight: number = 220;
-  private childCount: number = 2;
-  private childWeight: number = 50;
+  adultCount: number = 2;
+  adultWeight: number = 220;
+  childCount: number = 2;
+  childWeight: number = 50;
 
-  private paramWaterPercent: number = 60;
-  private paramSaltPerFlourKg: number = 14;
-  private paramYeastPerFlourKg: number = 7;
+  paramWaterPercent: number = 60;
+  paramSaltPerFlourKg: number = 14;
+  paramYeastPerFlourKg: number = 7;
 
-  private flourWeight: number = null;
-  private waterWeight: number = null;
-  private saltWeight: number = null;
-  private yeastWeight: number = null;
+  flourWeight: number = null;
+  waterWeight: number = null;
+  saltWeight: number = null;
+  yeastWeight: number = null;
 
 
   ngAfterViewInit(): void {
     this.calculate();
   }
 
-  private valueChange(v: any) {
+  valueChange(v: any) {
     this.calculate();
   }
 
