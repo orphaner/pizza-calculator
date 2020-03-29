@@ -9,9 +9,6 @@ on:
   pull_request:
     branches: [ master ]
 
-  env:
-    IMAGE_NAME: pizza-calculator
-
 jobs:
   build:
 
@@ -30,4 +27,4 @@ jobs:
       password: ${{ secrets.DOCKER_PASSWORD }}
       repository: myorg/myrepository
       tags: latest
-      
+
