@@ -1,20 +1,111 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="container">
 
+  <div class="row clearfix">
+    <div class="col-md-8 column">
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th class="text-center">#</th>
+          <th class="text-center">Quantité</th>
+          <th class="text-center">Poids en grammes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td> Pâtons adultes</td>
+          <td>
+            <input type="text" [(ngModel)]="adultCount" (ngModelChange)="valueChange($event)" class="form-control"/>
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="adultWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
+          </td>
+        </tr>
+        <tr>
+          <td> Pâtons enfant</td>
+          <td>
+            <input type="text" [(ngModel)]="childCount" (ngModelChange)="valueChange($event)" class="form-control"/>
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="childWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row clearfix">
+    <div class="col-md-8 column">
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th class="text-center">Paramètre</th>
+          <th class="text-center">Valeur</th>
+          <th class="text-center">Unité</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Taux d'hydratation</td>
+          <td>
+            <input type="text" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange($event)"
+                   class="form-control"/>
+          </td>
+          <td>% du poids de farine en eau</td>
+        </tr>
+        <tr>
+          <td>Sel</td>
+          <td>
+            <input type="text" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange($event)"
+                   class="form-control"/>
+          </td>
+          <td>grammes par kilo de farine</td>
+        </tr>
+        <tr>
+          <td>Levure</td>
+          <td>
+            <input type="text" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange($event)"
+                   class="form-control"/>
+          </td>
+          <td>grammes par kilo de farine</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row row-flex">
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="price-table pt-bg-black">
+        <div>
+          <span>farine</span>
+          <span>{{flourWeight}}g</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="price-table pt-bg-green">
+        <div>
+          <span>eau</span>
+          <span>{{waterWeight}}g</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="price-table pt-bg-red">
+        <div>
+          <span>sel</span>
+          <span>{{saltWeight}}g</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="price-table pt-bg-blue">
+        <div>
+          <span>levure</span>
+          <span>{{yeastWeight}}g</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
