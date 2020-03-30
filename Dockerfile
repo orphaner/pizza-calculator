@@ -7,5 +7,4 @@ COPY . .
 RUN npm build --prod
 
 FROM nginx:1.17
-RUN ls -lah /app/dist/
-COPY --from=builder  /app/dist/pizza-calculator /usr/share/nginx/html
+COPY --from=builder  /app/dist/* /usr/share/nginx/html
