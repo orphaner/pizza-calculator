@@ -4,7 +4,7 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 RUN npm ci
 COPY . .
-RUN npm build --prod
+RUN npm run build --prod
 
 FROM nginx:1.17
-COPY --from=builder  /app/dist/* /usr/share/nginx/html
+COPY --from=builder  /app/dist/pizza-calculator /usr/share/nginx/html
