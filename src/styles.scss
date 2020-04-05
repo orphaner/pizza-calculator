@@ -1,6 +1,15 @@
+@import '../node_modules/bootstrap/scss/bootstrap-reboot';
+@import '../node_modules/bootstrap/scss/grid';
+@import '../node_modules/bootstrap/scss/tables';
+@import '../node_modules/bootstrap/scss/forms';
+@import '../node_modules/bootstrap/scss/buttons';
+@import '../node_modules/bootstrap/scss/nav';
+@import '../node_modules/bootstrap/scss/utilities';
+
 body {
   // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
   background-color: #f8f8f8;
   height: 100vh;
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  font-family: 'Source Sans Pro', $font-family-sans-serif;
 }
