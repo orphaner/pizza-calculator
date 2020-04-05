@@ -17,8 +17,10 @@
 }
 
 .price-table {
-  min-height: 12rem;
-  width: 12rem;
+  min-height: 3rem;
+  min-width: 3rem;
+  max-height: 12rem;
+  max-width: 12rem;
   background-color: #fff;
   border-radius: 50%;
   border: 1px solid #ddd;

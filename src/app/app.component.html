@@ -48,7 +48,7 @@
               <tr>
                 <td class="align-middle">Taux d'hydratation</td>
                 <td class="align-middle">
-                  <input type="text" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange($event)"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">% du poids de farine en eau</td>
@@ -56,7 +56,7 @@
               <tr>
                 <td class="align-middle">Sel</td>
                 <td class="align-middle">
-                  <input type="text" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange($event)"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">grammes par kilo de farine</td>
@@ -64,7 +64,7 @@
               <tr>
                 <td class="align-middle">Levure</td>
                 <td class="align-middle">
-                  <input type="text" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange($event)"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">grammes par kilo de farine</td>
@@ -78,7 +78,7 @@
 
   <h2 class="my-4">Ingrédients</h2>
   <div class="row row-flex">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
 
       <div class="price-table pt-bg-ingredient1">
         <div>
@@ -87,7 +87,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
       <div class="price-table pt-bg-ingredient2">
         <div>
           <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
@@ -95,7 +95,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
       <div class="price-table pt-bg-ingredient3">
         <div>
           <span><i class="pz pz-salt pz-mx-auto"></i> sel</span>
@@ -103,7 +103,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
       <div class="price-table pt-bg-ingredient4">
         <div>
           <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
