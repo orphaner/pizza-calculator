@@ -1,3 +1,12 @@
+/* Tabset */
+.tabset-tab {
+  background-color: white;
+  min-height: 18rem;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-top: inherit;
+}
+
 /* PRICE TABLE */
 .row-flex {
   display: flex;
@@ -8,15 +17,13 @@
 }
 
 .price-table {
-  max-width: 400px;
-  min-height: 100px;
-  width: 160px;
+  min-height: 12rem;
+  width: 12rem;
   background-color: #fff;
-  border-radius: 0 0 0 25px;
-  border: 1px solid #ccc;
-  box-shadow: 5px 5px 8px #ccc;
+  border-radius: 50%;
+  border: 1px solid #ddd;
   display: block;
-  margin: 10px;
+  margin: 10px auto;
   padding: 0 0 8px 0;
   text-align: center;
 }
@@ -26,51 +33,65 @@
 }
 
 .price-table span:first-child {
-  padding: 16px 0 16px 0;
+  padding: 16px 0 8px 0;
   font-size: 2em;
   text-transform: uppercase;
   font-weight: bold;
 }
 
 .price-table span:nth-child(2) {
-  padding: 8px 0;
+  // padding: 8px 0;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.5em;
+  color: #545b62;
 }
 
 /* Colors */
-.pt-bg-black span:first-child {
-  background-color: #212121;
-  color: #fcfcfc;
+.pt-bg-ingredient1 {
+  border-color: #fdca74;
 }
 
-.pt-bg-black span:nth-child(2) {
-  color: #757779;
+.pt-bg-ingredient2 {
+  border-color: #80e2ff;
 }
 
-.pt-bg-green span:first-child {
-  background-color: #27AE60;
-  color: #fcfcfc;
+.pt-bg-ingredient3 {
+  border-color: #4cc7b3;
 }
 
-.pt-bg-green span:nth-child(2) {
-  color: #757779;
+.pt-bg-ingredient4 {
+  border-color: #55c2e3;
 }
 
-.pt-bg-red span:first-child {
-  background-color: #C0392B;
-  color: #fcfcfc;
+/* Table custom colors */
+.table-hover tbody tr:hover {
+  background-color: #fff5e5;
 }
 
-.pt-bg-red span:nth-child(2) {
-  color: #757779;
+/* SVG Icons */
+.pz:before {
+  display: block;
+  content: ' ';
+  background-size: 4rem 4rem;
+  height: 4rem;
+  width: 4rem;
 }
-
-.pt-bg-blue span:first-child {
-  background-color: #2980B9;
-  color: #fcfcfc;
+.pz.pz-mx-auto::before {
+  margin: 0 auto;
 }
-
-.pt-bg-blue span:nth-child(2) {
-  color: #757779;
+.pz.circle-margin::before {
+  margin: .15rem .15rem .15rem .2rem;
+}
+// Icons made by https://www.flaticon.com/authors/freepik from www.flaticon.com
+.pz.pz-flour:before {
+  background-image: url('/assets/flour.svg');
+}
+.pz.pz-water:before {
+  background-image: url('/assets/measuring-cup.svg');
+}
+.pz.pz-salt:before {
+  background-image: url('/assets/spoon.svg');
+}
+.pz.pz-yeast:before {
+  background-image: url('/assets/strainer.svg');
 }

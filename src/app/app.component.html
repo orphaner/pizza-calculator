@@ -1,113 +1,118 @@
-<div class="container">
+<div class="container mt-4">
 
+  <h2 class="my-4">Pâte à pizza</h2>
   <div class="row clearfix">
-    <div class="col-md-8 column">
-      <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-          <th class="text-center">#</th>
-          <th class="text-center">Quantité</th>
-          <th class="text-center">Poids en grammes</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td> Pâtons adultes</td>
-          <td>
-            <input type="text" [(ngModel)]="adultCount" (ngModelChange)="valueChange($event)" class="form-control"/>
-          </td>
-          <td>
-            <input type="text" [(ngModel)]="adultWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
-          </td>
-        </tr>
-        <tr>
-          <td> Pâtons enfant</td>
-          <td>
-            <input type="text" [(ngModel)]="childCount" (ngModelChange)="valueChange($event)" class="form-control"/>
-          </td>
-          <td>
-            <input type="text" [(ngModel)]="childWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="col-md-12 column">
+      <tabset>
+        <tab heading="Portions" class="tabset-tab">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th class="text-center">#</th>
+              <th class="text-center">Quantité</th>
+              <th class="text-center">Poids en grammes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="align-middle">Pâtons adultes</td>
+              <td>
+                <input type="number" [(ngModel)]="adultCount" (ngModelChange)="valueChange($event)" class="form-control"/>
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="adultWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">Pâtons enfant</td>
+              <td>
+                <input type="number" [(ngModel)]="childCount" (ngModelChange)="valueChange($event)" class="form-control"/>
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="childWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </tab>
+        <tab heading="Paramètres de la pâte" class="tabset-tab">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="text-center">Paramètre</th>
+                <th class="text-center">Valeur</th>
+                <th class="text-center">Unité</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td class="align-middle">Taux d'hydratation</td>
+                <td class="align-middle">
+                  <input type="text" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange($event)"
+                        class="form-control"/>
+                </td>
+                <td class="align-middle">% du poids de farine en eau</td>
+              </tr>
+              <tr>
+                <td class="align-middle">Sel</td>
+                <td class="align-middle">
+                  <input type="text" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange($event)"
+                        class="form-control"/>
+                </td>
+                <td class="align-middle">grammes par kilo de farine</td>
+              </tr>
+              <tr>
+                <td class="align-middle">Levure</td>
+                <td class="align-middle">
+                  <input type="text" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange($event)"
+                        class="form-control"/>
+                </td>
+                <td class="align-middle">grammes par kilo de farine</td>
+              </tr>
+              </tbody>
+            </table>
+        </tab>
+      </tabset>
     </div>
   </div>
 
-  <div class="row clearfix">
-    <div class="col-md-8 column">
-      <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-          <th class="text-center">Paramètre</th>
-          <th class="text-center">Valeur</th>
-          <th class="text-center">Unité</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>Taux d'hydratation</td>
-          <td>
-            <input type="text" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange($event)"
-                   class="form-control"/>
-          </td>
-          <td>% du poids de farine en eau</td>
-        </tr>
-        <tr>
-          <td>Sel</td>
-          <td>
-            <input type="text" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange($event)"
-                   class="form-control"/>
-          </td>
-          <td>grammes par kilo de farine</td>
-        </tr>
-        <tr>
-          <td>Levure</td>
-          <td>
-            <input type="text" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange($event)"
-                   class="form-control"/>
-          </td>
-          <td>grammes par kilo de farine</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
+  <h2 class="my-4">Ingrédients</h2>
   <div class="row row-flex">
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-      <div class="price-table pt-bg-black">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+      <div class="price-table pt-bg-ingredient1">
         <div>
-          <span>farine</span>
+          <span><i class="pz pz-flour pz-mx-auto"></i> farine</span>
           <span>{{flourWeight}}g</span>
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-      <div class="price-table pt-bg-green">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="price-table pt-bg-ingredient2">
         <div>
-          <span>eau</span>
+          <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
           <span>{{waterWeight}}g</span>
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-      <div class="price-table pt-bg-red">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="price-table pt-bg-ingredient3">
         <div>
-          <span>sel</span>
+          <span><i class="pz pz-salt pz-mx-auto"></i> sel</span>
           <span>{{saltWeight}}g</span>
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-      <div class="price-table pt-bg-blue">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="price-table pt-bg-ingredient4">
         <div>
-          <span>levure</span>
+          <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
           <span>{{yeastWeight}}g</span>
         </div>
       </div>
     </div>
   </div>
 
-  <style>#forkongithub a{background:#000;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:absolute;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;z-index:9999;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}</style><span id="forkongithub"><a href="https://github.com/orphaner/pizza-calculator">Fork me on GitHub</a></span>
+  <style>#forkongithub a{background:#000;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:absolute;display:block;top:0;right:0;width:265px;overflow:hidden;height:265px;z-index:9999;}#forkongithub a{width:265px;position:absolute;top:55px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}</style>
+  <span id="forkongithub"><a href="https://github.com/orphaner/pizza-calculator">Fork me on GitHub</a></span>
 </div>

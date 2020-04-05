@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, Input} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit {
   title = 'pizza-calculator';
 
   adultCount: number = 2;
@@ -23,7 +23,7 @@ export class AppComponent implements AfterViewInit {
   yeastWeight: number = null;
 
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.calculate();
   }
 
