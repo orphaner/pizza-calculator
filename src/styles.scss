@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/bootstrap/scss/bootstrap-reboot';
+@import '../node_modules/bootstrap/scss/grid';
+@import '../node_modules/bootstrap/scss/tables';
+@import '../node_modules/bootstrap/scss/forms';
+@import '../node_modules/bootstrap/scss/buttons';
+@import '../node_modules/bootstrap/scss/nav';
+@import '../node_modules/bootstrap/scss/utilities';
+
+body {
+  // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+  background-color: #f8f8f8;
+  height: 100vh;
+
+  font-family: 'Source Sans Pro', $font-family-sans-serif;
+}
