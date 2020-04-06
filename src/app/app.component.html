@@ -69,6 +69,14 @@
                 </td>
                 <td class="align-middle">grammes par kilo de farine</td>
               </tr>
+              <tr>
+                <td class="align-middle">Huile d'olive</td>
+                <td class="align-middle">
+                  <input type="number" [(ngModel)]="paramOliveOilPerFlourKg" (ngModelChange)="valueChange($event)"
+                        class="form-control"/>
+                </td>
+                <td class="align-middle">grammes par kilo de farine</td>
+              </tr>
               </tbody>
             </table>
         </tab>
@@ -78,7 +86,7 @@
 
   <h2 class="my-4">Ingrédients</h2>
   <div class="row row-flex">
-    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg">
 
       <div class="ingredient i-bg-flour">
         <div>
@@ -87,7 +95,7 @@
         </div>
       </div>
     </div>
-    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg">
       <div class="ingredient i-bg-water">
         <div>
           <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
@@ -95,7 +103,7 @@
         </div>
       </div>
     </div>
-    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg">
       <div class="ingredient i-bg-salt">
         <div>
           <span><i class="pz pz-salt pz-mx-auto"></i> sel</span>
@@ -103,11 +111,19 @@
         </div>
       </div>
     </div>
-    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-6 col-sm-6 col-md-4 col-lg">
       <div class="ingredient i-bg-yeast">
         <div>
           <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
           <span>{{yeastWeight}}g</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-sm-6 col-md-4 col-lg">
+      <div class="ingredient i-bg-olive-oil">
+        <div>
+          <span><i class="pz pz-olive-oil pz-mx-auto"></i> huile d'olive</span>
+          <span>{{oliveOilWeight}}g</span>
         </div>
       </div>
     </div>

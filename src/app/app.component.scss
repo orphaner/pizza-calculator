@@ -1,7 +1,7 @@
 /* Tabset */
 .tabset-tab {
   background-color: white;
-  min-height: 18rem;
+  //min-height: 10rem;
   padding: 1rem;
   border: 1px solid #dee2e6;
   border-top: inherit;
@@ -17,15 +17,15 @@
 }
 
 .ingredient {
-  min-height: 3rem;
-  min-width: 3rem;
-  max-height: 12rem;
-  max-width: 12rem;
+  min-height: 13rem;
+  min-width: 13rem;
+  max-height: 13rem;
+  max-width: 13rem;
   background-color: #fff;
   border-radius: 50%;
   border: 1px solid #ddd;
   display: block;
-  margin: 10px auto;
+  margin: 0px auto;
   padding: 0 0 8px 0;
   text-align: center;
 }
@@ -36,7 +36,7 @@
 
 .ingredient span:first-child {
   padding: 16px 0 8px 0;
-  font-size: 2em;
+  font-size: 1.8em;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -63,6 +63,12 @@
 
 .i-bg-yeast {
   border-color: #55c2e3;
+}
+
+.i-bg-olive-oil {
+  //border-color: rgb(149, 214, 164);
+  //border-color: rgb(255, 234, 168);
+  border-color: rgb(255, 224, 125);
 }
 
 /* Table custom colors */
@@ -97,9 +103,15 @@
 .pz.pz-yeast:before {
   background-image: url('/assets/strainer.svg');
 }
-
+.pz.pz-olive-oil:before {
+  background-image: url('/assets/olive.svg');
+}
 
 .emoticon {
   font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort;
   font-size: 1.5rem;
+}
+
+.col-lg {
+  padding: 0px;
 }
