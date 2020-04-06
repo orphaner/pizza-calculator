@@ -16,7 +16,7 @@
   -moz-flex-wrap: wrap;
 }
 
-.price-table {
+.ingredient {
   min-height: 3rem;
   min-width: 3rem;
   max-height: 12rem;
@@ -30,18 +30,18 @@
   text-align: center;
 }
 
-.price-table span {
+.ingredient span {
   display: block;
 }
 
-.price-table span:first-child {
+.ingredient span:first-child {
   padding: 16px 0 8px 0;
   font-size: 2em;
   text-transform: uppercase;
   font-weight: bold;
 }
 
-.price-table span:nth-child(2) {
+.ingredient span:nth-child(2) {
   // padding: 8px 0;
   font-weight: bold;
   font-size: 1.5em;
@@ -49,19 +49,19 @@
 }
 
 /* Colors */
-.pt-bg-ingredient1 {
+.i-bg-flour {
   border-color: #fdca74;
 }
 
-.pt-bg-ingredient2 {
+.i-bg-water {
   border-color: #80e2ff;
 }
 
-.pt-bg-ingredient3 {
+.i-bg-salt {
   border-color: #4cc7b3;
 }
 
-.pt-bg-ingredient4 {
+.i-bg-yeast {
   border-color: #55c2e3;
 }
 
@@ -96,4 +96,10 @@
 }
 .pz.pz-yeast:before {
   background-image: url('/assets/strainer.svg');
+}
+
+
+.emoticon {
+  font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort;
+  font-size: 1.5rem;
 }

@@ -15,7 +15,7 @@
             </thead>
             <tbody>
             <tr>
-              <td class="align-middle">Pâtons adultes</td>
+              <td class="align-middle"><span class="emoticon">👩‍🌾</span> Pâtons adultes</td>
               <td>
                 <input type="number" [(ngModel)]="adultCount" (ngModelChange)="valueChange($event)" class="form-control"/>
               </td>
@@ -24,7 +24,7 @@
               </td>
             </tr>
             <tr>
-              <td class="align-middle">Pâtons enfant</td>
+              <td class="align-middle"><span class="emoticon">👶</span> Pâtons enfant</td>
               <td>
                 <input type="number" [(ngModel)]="childCount" (ngModelChange)="valueChange($event)" class="form-control"/>
               </td>
@@ -80,7 +80,7 @@
   <div class="row row-flex">
     <div class="col-6 col-sm-6 col-md-4 col-lg-3">
 
-      <div class="price-table pt-bg-ingredient1">
+      <div class="ingredient i-bg-flour">
         <div>
           <span><i class="pz pz-flour pz-mx-auto"></i> farine</span>
           <span>{{flourWeight}}g</span>
@@ -88,7 +88,7 @@
       </div>
     </div>
     <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-      <div class="price-table pt-bg-ingredient2">
+      <div class="ingredient i-bg-water">
         <div>
           <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
           <span>{{waterWeight}}g</span>
@@ -96,7 +96,7 @@
       </div>
     </div>
     <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-      <div class="price-table pt-bg-ingredient3">
+      <div class="ingredient i-bg-salt">
         <div>
           <span><i class="pz pz-salt pz-mx-auto"></i> sel</span>
           <span>{{saltWeight}}g</span>
@@ -104,7 +104,7 @@
       </div>
     </div>
     <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-      <div class="price-table pt-bg-ingredient4">
+      <div class="ingredient i-bg-yeast">
         <div>
           <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
           <span>{{yeastWeight}}g</span>
