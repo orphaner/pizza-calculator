@@ -77,6 +77,14 @@
 }
 
 /* SVG Icons */
+.pa:before {
+  display: inline-block;
+  content: ' ';
+  background-size: 1.5rem 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
 .pz:before {
   display: block;
   content: ' ';
@@ -84,26 +92,33 @@
   height: 4rem;
   width: 4rem;
 }
+
 .pz.pz-mx-auto::before {
   margin: 0 auto;
 }
+
 .pz.circle-margin::before {
   margin: .15rem .15rem .15rem .2rem;
 }
+
 // Icons made by https://www.flaticon.com/authors/freepik from www.flaticon.com
-.pz.pz-flour:before {
+.pz-flour:before {
   background-image: url('/assets/flour.svg');
 }
-.pz.pz-water:before {
+
+.pz-water:before {
   background-image: url('/assets/measuring-cup.svg');
 }
-.pz.pz-salt:before {
+
+.pz-salt:before {
   background-image: url('/assets/spoon.svg');
 }
-.pz.pz-yeast:before {
+
+.pz-yeast:before {
   background-image: url('/assets/strainer.svg');
 }
-.pz.pz-olive-oil:before {
+
+.pz-olive-oil:before {
   background-image: url('/assets/olive.svg');
 }
 
@@ -114,4 +129,65 @@
 
 .col-lg {
   padding: 0px;
+}
+
+// Github ribbon
+#forkongithub a {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  font-family: arial, sans-serif;
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 40px;
+  font-size: 1rem;
+  line-height: 2rem;
+  position: relative;
+  transition: 0.5s;
+}
+
+#forkongithub a:hover {
+  background: #c11;
+  color: #fff;
+}
+
+#forkongithub a::before, #forkongithub a::after {
+  content: "";
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 1px;
+  left: 0;
+  height: 1px;
+  background: #fff;
+}
+
+#forkongithub a::after {
+  bottom: 1px;
+  top: auto;
+}
+
+@media screen and (min-width: 800px) {
+  #forkongithub {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    width: 265px;
+    overflow: hidden;
+    height: 265px;
+    z-index: 9999;
+  }
+  #forkongithub a {
+    width: 265px;
+    position: absolute;
+    top: 55px;
+    right: -60px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+  }
 }
