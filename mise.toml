@@ -1,0 +1,19 @@
+[tools]
+node = "18.20.8"
+
+[env]
+DOCKER_NAMESPACE = "nicolaznk"
+IMAGE_NAME = "pizza-calculator"
+
+[tasks.start]
+description = "Démarre le serveur de développement (ng serve)"
+run = "npm start"
+
+[tasks."docker-build"]
+description = "Build l'image Docker de production (sans cache)"
+run = "docker image build --no-cache -t $DOCKER_NAMESPACE/$IMAGE_NAME:latest ."
+
+[tasks."docker-push"]
+description = "Push l'image Docker de production sur Docker Hub"
+depends = ["docker-build"]
+run = "docker push $DOCKER_NAMESPACE/$IMAGE_NAME:latest"
