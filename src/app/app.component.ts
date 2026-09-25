@@ -1,9 +1,11 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AppComponent implements OnInit {
   title = 'pizza-calculator';
@@ -18,11 +20,11 @@ export class AppComponent implements OnInit {
   paramYeastPerFlourKg: number = 7;
   paramOliveOilPerFlourKg: number = 60;
 
-  flourWeight: number = null;
-  waterWeight: number = null;
-  saltWeight: number = null;
-  yeastWeight: number = null;
-  oliveOilWeight: number = null;
+  flourWeight: number = 0;
+  waterWeight: number = 0;
+  saltWeight: number = 0;
+  yeastWeight: number = 0;
+  oliveOilWeight: number = 0;
 
 
   ngOnInit(): void {

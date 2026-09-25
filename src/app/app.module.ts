@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
       BrowserModule,
       FormsModule,
       BrowserAnimationsModule,
-      TabsModule.forRoot(),
+      TabsModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

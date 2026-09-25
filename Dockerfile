@@ -1,10 +1,10 @@
-FROM node:18.20.8-slim AS builder
+FROM node:24.21.0-slim AS builder
 WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY . .
-RUN npm run build --prod
+RUN npm run build:prod
 
 FROM nginx:1.17
-COPY --from=builder  /app/dist/pizza-calculator /usr/share/nginx/html
+COPY --from=builder  /app/dist/pizza-calculator/browser /usr/share/nginx/html
