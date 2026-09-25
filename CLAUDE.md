@@ -5,6 +5,7 @@ Guidance for Claude Code when working in this repository.
 ## Project overview
 - Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`unit-test` builders — all standalone, no NgModule), ESLint, Vitest, ngx-bootstrap, Bootstrap
 - Single standalone component: `src/app/app.component.ts` computes dough ingredient weights (flour/water/salt/yeast/olive oil) from portion counts and hydration parameters; bootstrapped directly via `bootstrapApplication` in `src/main.ts` (no `app.module.ts`)
+- **Zoneless**: no `zone.js`, `provideZonelessChangeDetection()` in `src/main.ts`. Change detection relies entirely on Angular's own event-binding notifications (`(ngModelChange)`, `(click)`, etc. all mark the view dirty on their own) — there is nothing to configure per-component for this to work, but any code that mutates component state from *outside* an Angular-triggered callback (raw `setTimeout`, a non-Angular event listener, a promise not awaited through Angular APIs) would silently fail to update the view and needs a manual `ChangeDetectorRef.markForCheck()`/signal.
 - Build output: `dist/pizza-calculator/browser` (path set in `angular.json`; the `application` builder nests output under `browser/` as of Angular 18)
 - Production: Docker build (`Dockerfile`) → static files served by NGINX
 - Upgraded from Angular 9 → 22 in one pass (`ng update` one major at a time). `ngx-bootstrap` majors track Angular majors 1:1 from v8 onward, so it was bumped in lockstep at every step.
@@ -52,6 +53,13 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 - `.browserslistrc` switched to Angular's modern `baseline widely available on <date>` query, dropping the old `> 0.5% / last 2 versions` query that was pulling in ancient/niche browsers (KaiOS, old Opera Mini, Chrome 109, etc.) and producing "unsupported browser" warnings.
 - The `e2e` architect target and npm script were removed: they pointed at Protractor (`@angular-devkit/build-angular:protractor`), which no longer ships in `@angular-devkit/build-angular`, and there was no `e2e/` directory or `protractor` dependency in the project anyway — it was already dead before this migration.
 - The `extract-i18n` architect target was removed from `angular.json` — it used the legacy `@angular-devkit/build-angular:extract-i18n` builder, was never invoked by any npm script, and would have failed anyway since `@angular/localize` was already removed as a dead dependency (see below); nothing in the project uses i18n.
+
+## Zoneless migration
+- Removed `zone.js` entirely: dropped from `dependencies` in `package.json` and from `polyfills` in `angular.json` (now `[]`). `src/main.ts`: `provideZoneChangeDetection()` → `provideZonelessChangeDetection()`.
+- No other code changes were required. The app's only reactivity is template event bindings (`(ngModelChange)="valueChange()"`), which Angular marks dirty on its own regardless of zone.js — this has been true since Ivy's notification-based scheduler, not something zoneless mode changes.
+- Bundle impact: the `polyfills` chunk (~35 kB raw / ~11 kB transferred) disappeared from the production build entirely.
+- Added a regression test (`app.component.spec.ts`) that specifically exercises this: `fixture.autoDetectChanges()` (no manual `detectChanges()` call) + a real `dispatchEvent(new Event('input'))` on the DOM, then asserts the recalculated total appears — this is the one test that would have caught a zoneless regression, since the other tests all call `detectChanges()` manually and wouldn't have noticed if automatic change detection broke.
+- Getting Vitest itself to run without zone.js required no extra work beyond removing the polyfill — the test-bed-init already special-cases "polyfills defined but doesn't include zone.js" as the zoneless case (see Vitest migration notes above).
 
 ## Post-migration cleanup
 - `tsconfig.json`: `strict: true` + `angularCompilerOptions.strictTemplates: true` enabled (previously only `strictInjectionParameters`/`fullTemplateTypeCheck`). Build/lint/tests all pass clean with no code changes required.

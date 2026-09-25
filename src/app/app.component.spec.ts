@@ -29,4 +29,22 @@ describe('AppComponent', () => {
         const compiled = fixture.debugElement.nativeElement;
         expect(compiled.querySelector('h2').textContent).toContain('Pâte à pizza');
     });
+
+    it('should recompute and render the total dough weight after a real user input event, with no manual detectChanges call', async () => {
+        const fixture = TestBed.createComponent(AppComponent);
+        // Relies on Angular's zoneless change-detection notification (event bindings
+        // mark the view dirty on their own) rather than a manual detectChanges() call,
+        // to catch any regression from removing zone.js.
+        fixture.autoDetectChanges();
+        await fixture.whenStable();
+
+        const compiled = fixture.debugElement.nativeElement;
+        const adultCountInput = compiled.querySelector('input[type="number"]') as HTMLInputElement;
+
+        adultCountInput.value = '5';
+        adultCountInput.dispatchEvent(new Event('input'));
+        await fixture.whenStable();
+
+        expect(compiled.querySelector('p').textContent).toContain('1200g');
+    });
 });
