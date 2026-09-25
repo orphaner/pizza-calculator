@@ -37,8 +37,8 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 ```
 
 ## CI
-- `.github/workflows/build.yml` builds and pushes a Docker image via `docker/build-push-action` on push/PR to `master`, using `DOCKER_USERNAME`/`DOCKER_PASSWORD` secrets.
-- Its `node-version` build matrix (`12.x`) is unused dead config — the job never references it.
+- `.github/workflows/build.yml`: `actions/checkout@v7` → `docker/login-action@v4` → `docker/build-push-action@v7` (`push: true`), building and pushing to Docker Hub (`nicolaznk/pizza-calculator:latest`) on push/PR to `master`, using `DOCKER_USERNAME`/`DOCKER_PASSWORD` secrets.
+- The dead `node-version: [12.x]` strategy matrix (never referenced — no `actions/setup-node` step existed) was removed along with the old `@v1`/`@v2` action versions and the deprecated inline-credentials auth pattern.
 
 ## Known follow-ups from the Angular 9 → 22 migration
 - `npm run lint` is wired up (ESLint via `angular-eslint`) and passes clean. `app.component.ts` is standalone with `ChangeDetectionStrategy.OnPush`.
@@ -52,4 +52,5 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 ## Post-migration cleanup
 - `tsconfig.json`: `strict: true` + `angularCompilerOptions.strictTemplates: true` enabled (previously only `strictInjectionParameters`/`fullTemplateTypeCheck`). Build/lint/tests all pass clean with no code changes required.
 - Removed dead dependencies: `@angular/router` and `@angular/localize` were listed in `package.json` but never imported anywhere in `src/` (no routing, no i18n in this single-component app).
-- Still open (flagged, not fixed): `nginx:1.17` in the `Dockerfile` is a 2019-era image with known CVEs (`nginx:stable` is 1.30.x) — worth bumping. `.github/workflows/build.yml` uses `actions/checkout@v2` (latest: v7) and `docker/build-push-action@v1` (latest: v7.x, and v1's inline username/password auth is a deprecated pattern vs. a separate `docker/login-action`). Bootstrap stays at 4.1.1 (separate markup-migration effort for v5+).
+- `Dockerfile`: `nginx:1.17` (2019-era, known CVEs) → `nginx:1.30.5` (current stable). Verified with a local `docker build` + `docker run` (HTTP 200, `nginx -v` confirms 1.30.5).
+- Still open (flagged, not fixed): Bootstrap stays at 4.1.1 — a v5+ migration is a separate, non-trivial markup effort.
