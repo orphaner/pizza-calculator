@@ -14,12 +14,12 @@ Guidance for Claude Code when working in this repository.
 - Bumped from 18.20.8: Angular CLI 22 requires Node `^22.22.3 || ^24.15.0 || >=26.0.0`. 24.21.0 is the current LTS line satisfying that.
 - `NODE_OPTIONS=--openssl-legacy-provider` is gone from all npm scripts — it was only needed for the old webpack-based Angular 9 build on Node 17+/OpenSSL 3; the modern esbuild-based builder doesn't need it.
 - `mise run start` / `mise start` runs `npm start` (dev server) using the pinned Node version.
-- The Docker build stage (`Dockerfile`) uses `node:24.21.0-slim`, aligned with `mise.toml`. `npm ci` there needs `--legacy-peer-deps` — the lockfile was generated with it (some transitive peer ranges, e.g. bootstrap 4's `jquery`/`popper.js`, aren't fully resolved otherwise) and a strict `npm ci` rejects it as "missing" packages without the flag.
+- The Docker build stage (`Dockerfile`) uses `node:24.21.0-slim`, aligned with `mise.toml`. Plain `npm ci` (no flags) works since the Bootstrap 5 upgrade — Bootstrap 4.1.1's unmet `jquery`/`popper.js` peerDependencies (which forced `--legacy-peer-deps` before) are gone.
 
 ## Common commands
 ```bash
 mise install                 # install pinned Node version
-npm ci --legacy-peer-deps    # install dependencies
+npm ci                        # install dependencies
 npm start                    # dev server, http://localhost:4200
 npm run build                # dev build
 npm run build:prod           # production build (AOT, optimizations)
@@ -43,7 +43,7 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 ## Known follow-ups from the Angular 9 → 22 migration
 - `npm run lint` is wired up (ESLint via `angular-eslint`) and passes clean. `app.component.ts` is standalone with `ChangeDetectionStrategy.OnPush`.
 - Builders modernized off Webpack: `serve` → `@angular/build:dev-server`, `test` → `@angular/build:karma` (both were flagged deprecated on the old `@angular-devkit/build-angular:*` builders). `karma.conf.js` updated to match (`karma-coverage` replaces `karma-coverage-istanbul-reporter`, no more `@angular-devkit/build-angular` framework/plugin entry).
-- Sass deprecation warnings from Bootstrap 4's own SCSS (via `src/styles.scss`'s `@import`s) are silenced via `stylePreprocessorOptions.sass.silenceDeprecations` in both the `build` and `test` targets in `angular.json` (`import`, `global-builtin`, `color-functions`, `slash-div`, `if-function`). This hides the noise but doesn't fix the root cause — only a Bootstrap 5 migration (separate, non-trivial markup effort) would.
+- Sass deprecation warnings from Bootstrap's own SCSS (via `src/styles.scss`'s `@import`s) are silenced via `stylePreprocessorOptions.sass.silenceDeprecations` in both the `build` and `test` targets in `angular.json` (`import`, `global-builtin`, `color-functions`, `slash-div`, `if-function`). Bootstrap 5.3.8 still uses `@import` internally (not yet `@use`), so this is still needed even post-Bootstrap-5-upgrade.
 - `.browserslistrc` switched to Angular's modern `baseline widely available on <date>` query, dropping the old `> 0.5% / last 2 versions` query that was pulling in ancient/niche browsers (KaiOS, old Opera Mini, Chrome 109, etc.) and producing "unsupported browser" warnings.
 - Angular offers an optional `ng update @angular/cli --name migrate-karma-to-vitest` migration to switch off Karma entirely — not applied, kept the existing Jasmine/Karma/ChromeHeadless setup.
 - The `e2e` architect target and npm script were removed: they pointed at Protractor (`@angular-devkit/build-angular:protractor`), which no longer ships in `@angular-devkit/build-angular`, and there was no `e2e/` directory or `protractor` dependency in the project anyway — it was already dead before this migration.
@@ -53,4 +53,8 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 - `tsconfig.json`: `strict: true` + `angularCompilerOptions.strictTemplates: true` enabled (previously only `strictInjectionParameters`/`fullTemplateTypeCheck`). Build/lint/tests all pass clean with no code changes required.
 - Removed dead dependencies: `@angular/router` and `@angular/localize` were listed in `package.json` but never imported anywhere in `src/` (no routing, no i18n in this single-component app).
 - `Dockerfile`: `nginx:1.17` (2019-era, known CVEs) → `nginx:1.30.5` (current stable). Verified with a local `docker build` + `docker run` (HTTP 200, `nginx -v` confirms 1.30.5).
-- Still open (flagged, not fixed): Bootstrap stays at 4.1.1 — a v5+ migration is a separate, non-trivial markup effort.
+- Bootstrap 4.1.1 → 5.3.8. The app's own markup (`app.component.html`) needed zero changes — no renamed/removed classes were in use (`.close`, `.form-group`, `data-toggle`, etc.). `src/styles.scss` did need two new `@import`s that BS4 didn't require:
+  - `bootstrap/scss/containers` — `.container`/`.container-fluid` moved out of `_grid.scss` into their own partial in BS5.
+  - `bootstrap/scss/helpers` and `bootstrap/scss/utilities/api` — BS5's utilities (`.mt-4`, `.text-center`, `.align-middle`, `.clearfix`, etc.) became map-driven; `@import "utilities"` alone now only defines the `$utilities` Sass map, it no longer emits any CSS classes on its own.
+  - **Caught by grepping the compiled CSS for every Bootstrap class actually used in the templates** (`.container`, `.mt-4`, `.clearfix`, ...) after the version bump — the build produced zero errors/warnings despite silently dropping these classes, so this class of regression won't show up in `npm run build`/lint/tests. Worth the same grep check after any future Bootstrap import changes.
+  - Also fixed: `npm ci` no longer needs `--legacy-peer-deps` (see above) — Bootstrap 5 dropped the jQuery/Popper peer deps.
