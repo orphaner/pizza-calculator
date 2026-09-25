@@ -17,19 +17,19 @@
             <tr>
               <td class="align-middle"><span class="emoticon">👩‍🌾</span> Pâtons adultes</td>
               <td>
-                <input type="number" [(ngModel)]="adultCount" (ngModelChange)="valueChange($event)" class="form-control"/>
+                <input type="number" [(ngModel)]="adultCount" (ngModelChange)="valueChange()" class="form-control"/>
               </td>
               <td>
-                <input type="number" [(ngModel)]="adultWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
+                <input type="number" [(ngModel)]="adultWeight" (ngModelChange)="valueChange()" class="form-control"/>
               </td>
             </tr>
             <tr>
               <td class="align-middle"><span class="emoticon">👶</span> Pâtons enfant</td>
               <td>
-                <input type="number" [(ngModel)]="childCount" (ngModelChange)="valueChange($event)" class="form-control"/>
+                <input type="number" [(ngModel)]="childCount" (ngModelChange)="valueChange()" class="form-control"/>
               </td>
               <td>
-                <input type="number" [(ngModel)]="childWeight" (ngModelChange)="valueChange($event)" class="form-control"/>
+                <input type="number" [(ngModel)]="childWeight" (ngModelChange)="valueChange()" class="form-control"/>
               </td>
             </tr>
             </tbody>
@@ -48,7 +48,7 @@
               <tr>
                 <td class="align-middle"><i class="pa pz-water"></i> Taux d'hydratation</td>
                 <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange()"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">% du poids de farine en eau</td>
@@ -56,7 +56,7 @@
               <tr>
                 <td class="align-middle"><i class="pa pz-salt"></i> Sel</td>
                 <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange()"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">grammes par kilo de farine</td>
@@ -64,7 +64,7 @@
               <tr>
                 <td class="align-middle"><i class="pa pz-yeast"></i> Levure</td>
                 <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange()"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">grammes par kilo de farine</td>
@@ -72,7 +72,7 @@
               <tr>
                 <td class="align-middle"><i class="pa pz-olive-oil"></i> Huile d'olive</td>
                 <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramOliveOilPerFlourKg" (ngModelChange)="valueChange($event)"
+                  <input type="number" [(ngModel)]="paramOliveOilPerFlourKg" (ngModelChange)="valueChange()"
                         class="form-control"/>
                 </td>
                 <td class="align-middle">grammes par kilo de farine</td>

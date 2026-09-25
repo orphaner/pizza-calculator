@@ -3,8 +3,8 @@
 Guidance for Claude Code when working in this repository.
 
 ## Project overview
-- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application` builder), Karma/Jasmine for unit tests, ESLint, ngx-bootstrap, Bootstrap
-- Single-component app: `src/app/app.component.ts` computes dough ingredient weights (flour/water/salt/yeast/olive oil) from portion counts and hydration parameters
+- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`karma` builders — all standalone, no NgModule), ESLint, ngx-bootstrap, Bootstrap
+- Single standalone component: `src/app/app.component.ts` computes dough ingredient weights (flour/water/salt/yeast/olive oil) from portion counts and hydration parameters; bootstrapped directly via `bootstrapApplication` in `src/main.ts` (no `app.module.ts`)
 - Build output: `dist/pizza-calculator/browser` (path set in `angular.json`; the `application` builder nests output under `browser/` as of Angular 18)
 - Production: Docker build (`Dockerfile`) → static files served by NGINX
 - Upgraded from Angular 9 → 22 in one pass (`ng update` one major at a time). `ngx-bootstrap` majors track Angular majors 1:1 from v8 onward, so it was bumped in lockstep at every step.
@@ -41,8 +41,10 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 - Its `node-version` build matrix (`12.x`) is unused dead config — the job never references it.
 
 ## Known follow-ups from the Angular 9 → 22 migration
-- `npm run lint` is wired up (ESLint via `angular-eslint`) but currently reports ~14 pre-existing findings in `app.component.ts` (unused imports, `any` usage, non-`OnPush`/non-standalone component, etc.) — not fixed, since they're app-code style choices, not upgrade blockers.
-- The Karma unit-test builder is flagged deprecated by the CLI in favor of `@angular/build:karma` (part of Angular's move away from Webpack). Tests still pass; migrating the builder/tooling wasn't done.
-- Angular offers an optional `ng update @angular/cli --name migrate-karma-to-vitest` migration to switch off Karma entirely — not applied, kept the existing Jasmine/Karma/ChromeHeadless setup as-is.
+- `npm run lint` is wired up (ESLint via `angular-eslint`) and passes clean. `app.component.ts` is standalone with `ChangeDetectionStrategy.OnPush`.
+- Builders modernized off Webpack: `serve` → `@angular/build:dev-server`, `test` → `@angular/build:karma` (both were flagged deprecated on the old `@angular-devkit/build-angular:*` builders). `karma.conf.js` updated to match (`karma-coverage` replaces `karma-coverage-istanbul-reporter`, no more `@angular-devkit/build-angular` framework/plugin entry).
+- Sass deprecation warnings from Bootstrap 4's own SCSS (via `src/styles.scss`'s `@import`s) are silenced via `stylePreprocessorOptions.sass.silenceDeprecations` in both the `build` and `test` targets in `angular.json` (`import`, `global-builtin`, `color-functions`, `slash-div`, `if-function`). This hides the noise but doesn't fix the root cause — only a Bootstrap 5 migration (separate, non-trivial markup effort) would.
+- `.browserslistrc` switched to Angular's modern `baseline widely available on <date>` query, dropping the old `> 0.5% / last 2 versions` query that was pulling in ancient/niche browsers (KaiOS, old Opera Mini, Chrome 109, etc.) and producing "unsupported browser" warnings.
+- Angular offers an optional `ng update @angular/cli --name migrate-karma-to-vitest` migration to switch off Karma entirely — not applied, kept the existing Jasmine/Karma/ChromeHeadless setup.
 - The `e2e` architect target and npm script were removed: they pointed at Protractor (`@angular-devkit/build-angular:protractor`), which no longer ships in `@angular-devkit/build-angular`, and there was no `e2e/` directory or `protractor` dependency in the project anyway — it was already dead before this migration.
-- `browserslist` still lists some very old/niche browsers (`kaios`, `and_qq`, `opera` old versions, `chrome 109`, etc.) that the current Angular CLI build ignores or warns about; harmless, but worth pruning if the warnings are annoying.
+- `extract-i18n` architect target still uses the legacy `@angular-devkit/build-angular:extract-i18n` builder — unused by any npm script, left as-is.

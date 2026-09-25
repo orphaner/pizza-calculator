@@ -1,37 +1,40 @@
-import {AfterViewInit, Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {TabsModule} from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, TabsModule]
 })
 export class AppComponent implements OnInit {
   title = 'pizza-calculator';
 
-  adultCount: number = 2;
-  adultWeight: number = 220;
-  childCount: number = 2;
-  childWeight: number = 50;
+  adultCount = 2;
+  adultWeight = 220;
+  childCount = 2;
+  childWeight = 50;
 
-  paramWaterPercent: number = 60;
-  paramSaltPerFlourKg: number = 14;
-  paramYeastPerFlourKg: number = 7;
-  paramOliveOilPerFlourKg: number = 60;
+  paramWaterPercent = 60;
+  paramSaltPerFlourKg = 14;
+  paramYeastPerFlourKg = 7;
+  paramOliveOilPerFlourKg = 60;
 
-  flourWeight: number = 0;
-  waterWeight: number = 0;
-  saltWeight: number = 0;
-  yeastWeight: number = 0;
-  oliveOilWeight: number = 0;
+  flourWeight = 0;
+  waterWeight = 0;
+  saltWeight = 0;
+  yeastWeight = 0;
+  oliveOilWeight = 0;
 
 
   ngOnInit(): void {
     this.calculate();
   }
 
-  valueChange(v: any) {
+  valueChange(): void {
     this.calculate();
   }
 
