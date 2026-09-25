@@ -3,7 +3,7 @@
 Guidance for Claude Code when working in this repository.
 
 ## Project overview
-- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`karma` builders — all standalone, no NgModule), ESLint, ngx-bootstrap, Bootstrap
+- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`unit-test` builders — all standalone, no NgModule), ESLint, Vitest, ngx-bootstrap, Bootstrap
 - Single standalone component: `src/app/app.component.ts` computes dough ingredient weights (flour/water/salt/yeast/olive oil) from portion counts and hydration parameters; bootstrapped directly via `bootstrapApplication` in `src/main.ts` (no `app.module.ts`)
 - Build output: `dist/pizza-calculator/browser` (path set in `angular.json`; the `application` builder nests output under `browser/` as of Angular 18)
 - Production: Docker build (`Dockerfile`) → static files served by NGINX
@@ -23,8 +23,8 @@ npm ci                        # install dependencies
 npm start                    # dev server, http://localhost:4200
 npm run build                # dev build
 npm run build:prod           # production build (AOT, optimizations)
-npm test                     # unit tests (Karma, watch mode)
-ng test --watch=false --browsers=ChromeHeadless   # CI-style single run
+npm test                     # unit tests (Vitest, watch mode)
+ng test --watch=false        # CI-style single run
 npm run lint                 # ESLint via Angular CLI (angular-eslint)
 ```
 
@@ -42,10 +42,14 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 
 ## Known follow-ups from the Angular 9 → 22 migration
 - `npm run lint` is wired up (ESLint via `angular-eslint`) and passes clean. `app.component.ts` is standalone with `ChangeDetectionStrategy.OnPush`.
-- Builders modernized off Webpack: `serve` → `@angular/build:dev-server`, `test` → `@angular/build:karma` (both were flagged deprecated on the old `@angular-devkit/build-angular:*` builders). `karma.conf.js` updated to match (`karma-coverage` replaces `karma-coverage-istanbul-reporter`, no more `@angular-devkit/build-angular` framework/plugin entry).
+- Builders modernized off Webpack: `build`/`serve` → `@angular/build:application`/`:dev-server` (were flagged deprecated on the old `@angular-devkit/build-angular:*` aliases).
+- `test` migrated from Karma+Jasmine to **Vitest** via `ng update @angular/cli --name migrate-karma-to-vitest` (builder: `@angular/build:unit-test`, `"runner": "vitest"`). `karma.conf.js`, `src/test.ts`, and all `karma-*`/`@types/jasmine` packages were removed. Spec syntax (`describe`/`it`/`expect`/`beforeEach`) is unchanged — only the runner changed, via explicit `import { ... } from "vitest"` in each spec file (added by `ng g @schematics/angular:refactor-jasmine-vitest --add-imports`).
+- Two non-obvious fixes were needed to get Vitest actually passing, neither caught by the migration schematic itself:
+  - `polyfills` in `angular.json` switched from the file `src/polyfills.ts` (which only did `import 'zone.js'`) to the literal `["zone.js"]` polyfill declaration. With a `.ts` file, the builder can't statically tell zone.js is a build-time polyfill, so it loads it via `await import(...)` in the test-bed-init, and that fails with "Top-level await is not supported" under Zone.js. The literal `"zone.js"` polyfill entry makes it load via a plain `import` instead.
+  - `waitForAsync(...)` around `TestBed.configureTestingModule(...).compileComponents()` in spec files was replaced with a plain `async () => { await ...compileComponents(); }`. `waitForAsync` needs zone.js's ProxyZone (from `zone.js/testing`), which isn't set up the same way under the new Vitest test-bed-init — it threw "Expected to be running in 'ProxyZone', but it was not found."
+  - Also removed `tsconfig.json`'s explicit `"typeRoots": ["node_modules/@types"]` (a redundant vestige equal to the TS default) — it was blocking resolution of `"vitest/globals"` in `tsconfig.spec.json`'s `types` array (`TS2688: Cannot find type definition file for 'vitest/globals'`), since that package ships its own types outside `@types/`.
 - Sass deprecation warnings from Bootstrap's own SCSS (via `src/styles.scss`'s `@import`s) are silenced via `stylePreprocessorOptions.sass.silenceDeprecations` in both the `build` and `test` targets in `angular.json` (`import`, `global-builtin`, `color-functions`, `slash-div`, `if-function`). Bootstrap 5.3.8 still uses `@import` internally (not yet `@use`), so this is still needed even post-Bootstrap-5-upgrade.
 - `.browserslistrc` switched to Angular's modern `baseline widely available on <date>` query, dropping the old `> 0.5% / last 2 versions` query that was pulling in ancient/niche browsers (KaiOS, old Opera Mini, Chrome 109, etc.) and producing "unsupported browser" warnings.
-- Angular offers an optional `ng update @angular/cli --name migrate-karma-to-vitest` migration to switch off Karma entirely — not applied, kept the existing Jasmine/Karma/ChromeHeadless setup.
 - The `e2e` architect target and npm script were removed: they pointed at Protractor (`@angular-devkit/build-angular:protractor`), which no longer ships in `@angular-devkit/build-angular`, and there was no `e2e/` directory or `protractor` dependency in the project anyway — it was already dead before this migration.
 - `extract-i18n` architect target still uses the legacy `@angular-devkit/build-angular:extract-i18n` builder — unused by any npm script, left as-is. Note: since `@angular/localize` was removed as a dead dependency (see below), actually invoking this target would now fail; nothing in the project uses i18n.
 
