@@ -9,6 +9,14 @@ IMAGE_NAME = "pizza-calculator"
 description = "Démarre le serveur de développement (ng serve)"
 run = "npm start"
 
+[tasks."start-lan"]
+description = "Démarre le serveur de dev accessible depuis le réseau local (test sur mobile)"
+run = """
+ip=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo localhost)
+echo "Accessible depuis le réseau local : http://$ip:4200"
+npm start -- --host 0.0.0.0
+"""
+
 [tasks."docker-build"]
 description = "Build l'image Docker de production (sans cache)"
 run = "docker image build --no-cache -t $DOCKER_NAMESPACE/$IMAGE_NAME:latest ."
