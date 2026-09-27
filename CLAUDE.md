@@ -112,13 +112,13 @@ only take effect in the next session.
   the net is never actually needed. The portion labels are "Adultes"/"Enfant"
   rather than "Pâtons adultes"/"Pâtons enfant" for the same reason (the column
   heading already says Portions); the full wording lives on in their aria-labels.
-- The "Fork me on GitHub" ribbon is `pointer-events: none` with the link itself
-  back to `auto`. It is a rotated link inside a 265x265 box at `z-index: 9999`
-  that is empty almost everywhere, and that empty area silently swallowed clicks
-  on whatever sat under it — which is how moving the biga switch into the
-  top-right column appeared to "break" it. The layout spec
-  "no control is covered by another element" guards this: a green build, green
-  unit tests and a correct-looking page all missed it.
+- The corner "Fork me on GitHub" ribbon is gone, replaced by a quiet
+  `.page-footer` link. It was a rotated link inside a 265x265 box at
+  `z-index: 9999`, empty almost everywhere, and that empty area silently
+  swallowed clicks on whatever sat under it — which is how moving the biga
+  switch into the top-right column appeared to "break" it. The layout spec
+  "no control is covered by another element" still guards the class of defect:
+  a green build, green unit tests and a correct-looking page all missed it.
 - The biga has its own panel: a `.setting-row` whose control is a Bootstrap 5
   `.form-check.form-switch` instead of a number field, with "Farine en biga"
   appearing below it as a second row when it is on. `.form-switch` did not exist in Bootstrap 4, so this depends on the BS5
