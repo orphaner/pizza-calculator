@@ -7,72 +7,67 @@
   border-top: inherit;
 }
 
-/* PRICE TABLE */
-.row-flex {
+/* INGREDIENT ROWS */
+.ingredient-list {
   display: flex;
-  flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  -moz-flex-wrap: wrap;
+  flex-direction: column;
+  gap: .625rem;
+  max-width: 32rem;
 }
 
-.ingredient {
-  min-height: 13rem;
-  min-width: 13rem;
-  max-height: 13rem;
-  max-width: 13rem;
+.ingredient-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .625rem 1rem;
   background-color: #fff;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-  display: block;
-  margin: 0px auto;
-  padding: 0 0 8px 0;
-  text-align: center;
+  border: 1px solid #e9e9e9;
+  border-left-width: .625rem;
+  border-radius: .5rem;
 }
 
-.ingredient span {
-  display: block;
+.ingredient-row .pz {
+  flex: 0 0 auto;
 }
 
-.ingredient span:first-child {
-  padding: 16px 0 8px 0;
-  font-size: 1.8em;
+.ingredient-label {
+  flex: 1 1 auto;
+  font-size: 1.05rem;
+  font-weight: bold;
   text-transform: uppercase;
-  font-weight: bold;
 }
 
-.ingredient span:nth-child(2) {
-  // padding: 8px 0;
+.ingredient-value {
+  flex: 0 0 auto;
+  font-size: 1.25rem;
   font-weight: bold;
-  font-size: 1.5em;
   color: #545b62;
+  white-space: nowrap;
 }
 
-/* Colors */
+/* Colors (left border of each ingredient row) */
 .i-bg-flour {
-  border-color: #fdca74;
+  border-left-color: #fdca74;
 }
 
 .i-bg-water {
-  border-color: #80e2ff;
+  border-left-color: #80e2ff;
 }
 
 .i-bg-salt {
-  border-color: #4cc7b3;
+  border-left-color: #4cc7b3;
 }
 
 .i-bg-yeast {
-  border-color: #55c2e3;
+  border-left-color: #55c2e3;
 }
 
 .i-bg-olive-oil {
-  //border-color: rgb(149, 214, 164);
-  //border-color: rgb(255, 234, 168);
-  border-color: rgb(255, 224, 125);
+  border-left-color: rgb(255, 224, 125);
 }
 
 .i-bg-bigga {
-  border-color: #c9a876;
+  border-left-color: #c9a876;
 }
 
 /* Table custom colors */
@@ -92,17 +87,9 @@
 .pz:before {
   display: block;
   content: ' ';
-  background-size: 4rem 4rem;
-  height: 4rem;
-  width: 4rem;
-}
-
-.pz.pz-mx-auto::before {
-  margin: 0 auto;
-}
-
-.pz.circle-margin::before {
-  margin: .15rem .15rem .15rem .2rem;
+  background-size: 2.25rem 2.25rem;
+  height: 2.25rem;
+  width: 2.25rem;
 }
 
 // Icons made by https://www.flaticon.com/authors/freepik from www.flaticon.com
@@ -126,13 +113,13 @@
   background-image: url('/assets/olive.svg');
 }
 
+.pz-bigga:before {
+  background-image: url('/assets/wheat.svg');
+}
+
 .emoticon {
   font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort;
   font-size: 1.5rem;
-}
-
-.col-lg {
-  padding: 0px;
 }
 
 // Github ribbon

@@ -103,133 +103,98 @@
 
   <h2 class="my-4">Ingrédients</h2>
   <p><strong>Poids total de pâte:</strong> {{flourWeight + waterWeight}}g</p>
-  <div class="row row-flex">
-    <div class="col-12 col-sm-6 col-md-4 col-lg">
 
-      <div class="ingredient i-bg-flour">
-        <div>
-          <span><i class="pz pz-flour pz-mx-auto"></i> farine</span>
-          <span>{{flourWeight}}g</span>
+  <div class="row">
+    <div class="col-12 col-lg-4">
+      <h5 class="mb-3">🥣 Pâte complète</h5>
+      <div class="ingredient-list">
+        <div class="ingredient-row i-bg-flour">
+          <i class="pz pz-flour"></i>
+          <span class="ingredient-label">Farine</span>
+          <span class="ingredient-value">{{flourWeight}}g</span>
+        </div>
+        <div class="ingredient-row i-bg-water">
+          <i class="pz pz-water"></i>
+          <span class="ingredient-label">Eau</span>
+          <span class="ingredient-value">{{waterWeight}}g</span>
+        </div>
+        <div class="ingredient-row i-bg-salt">
+          <i class="pz pz-salt"></i>
+          <span class="ingredient-label">Sel</span>
+          <span class="ingredient-value">{{saltWeight}}g</span>
+        </div>
+        <div class="ingredient-row i-bg-yeast">
+          <i class="pz pz-yeast"></i>
+          <span class="ingredient-label">Levure</span>
+          <span class="ingredient-value">{{yeastWeight}}g</span>
+        </div>
+        <div class="ingredient-row i-bg-olive-oil">
+          <i class="pz pz-olive-oil"></i>
+          <span class="ingredient-label">Huile d'olive</span>
+          <span class="ingredient-value">{{oliveOilWeight}}g</span>
         </div>
       </div>
     </div>
-    <div class="col-12 col-sm-6 col-md-4 col-lg">
-      <div class="ingredient i-bg-water">
-        <div>
-          <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
-          <span>{{waterWeight}}g</span>
+
+    @if (useBigga) {
+      <div class="col-12 col-lg-4">
+        <h5 class="mb-3 mt-4 mt-lg-0">🍞 Biga — la veille</h5>
+        <div class="ingredient-list">
+          <div class="ingredient-row i-bg-flour">
+            <i class="pz pz-flour"></i>
+            <span class="ingredient-label">Farine</span>
+            <span class="ingredient-value">{{biggaFlourWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-water">
+            <i class="pz pz-water"></i>
+            <span class="ingredient-label">Eau</span>
+            <span class="ingredient-value">{{biggaWaterWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-yeast">
+            <i class="pz pz-yeast"></i>
+            <span class="ingredient-label">Levure</span>
+            <span class="ingredient-value">{{biggaYeastWeight}}g</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-4 col-lg">
-      <div class="ingredient i-bg-salt">
-        <div>
-          <span><i class="pz pz-salt pz-mx-auto"></i> sel</span>
-          <span>{{saltWeight}}g</span>
+
+      <div class="col-12 col-lg-4">
+        <h5 class="mb-3 mt-4 mt-lg-0">🍕 Pâte finale — jour J</h5>
+        <div class="ingredient-list">
+          <div class="ingredient-row i-bg-bigga">
+            <i class="pz pz-bigga"></i>
+            <span class="ingredient-label">Biga entière</span>
+            <span class="ingredient-value">{{biggaFlourWeight + biggaWaterWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-flour">
+            <i class="pz pz-flour"></i>
+            <span class="ingredient-label">Farine</span>
+            <span class="ingredient-value">{{finalFlourWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-water">
+            <i class="pz pz-water"></i>
+            <span class="ingredient-label">Eau</span>
+            <span class="ingredient-value">{{finalWaterWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-yeast">
+            <i class="pz pz-yeast"></i>
+            <span class="ingredient-label">Levure</span>
+            <span class="ingredient-value">{{finalYeastWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-salt">
+            <i class="pz pz-salt"></i>
+            <span class="ingredient-label">Sel</span>
+            <span class="ingredient-value">{{saltWeight}}g</span>
+          </div>
+          <div class="ingredient-row i-bg-olive-oil">
+            <i class="pz pz-olive-oil"></i>
+            <span class="ingredient-label">Huile d'olive</span>
+            <span class="ingredient-value">{{oliveOilWeight}}g</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-4 col-lg">
-      <div class="ingredient i-bg-yeast">
-        <div>
-          <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
-          <span>{{yeastWeight}}g</span>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-4 col-lg">
-      <div class="ingredient i-bg-olive-oil">
-        <div>
-          <span><i class="pz pz-olive-oil pz-mx-auto"></i> huile d'olive</span>
-          <span>{{oliveOilWeight}}g</span>
-        </div>
-      </div>
-    </div>
+    }
   </div>
-
-  @if (useBigga) {
-    <h2 class="my-4">Biga (préparation en 2 temps)</h2>
-
-    <h5 class="mb-3">🍞 Biga — la veille</h5>
-    <div class="row row-flex">
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-flour">
-          <div>
-            <span><i class="pz pz-flour pz-mx-auto"></i> farine</span>
-            <span>{{biggaFlourWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-water">
-          <div>
-            <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
-            <span>{{biggaWaterWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-yeast">
-          <div>
-            <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
-            <span>{{biggaYeastWeight}}g</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h5 class="mb-3 mt-4">🍕 Pâte finale — jour J</h5>
-    <div class="row row-flex">
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-flour">
-          <div>
-            <span><i class="pz pz-flour pz-mx-auto"></i> farine</span>
-            <span>{{finalFlourWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-water">
-          <div>
-            <span><i class="pz pz-water pz-mx-auto"></i> eau</span>
-            <span>{{finalWaterWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-yeast">
-          <div>
-            <span><i class="pz pz-yeast pz-mx-auto"></i> levure</span>
-            <span>{{finalYeastWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-salt">
-          <div>
-            <span><i class="pz pz-salt pz-mx-auto"></i> sel</span>
-            <span>{{saltWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-olive-oil">
-          <div>
-            <span><i class="pz pz-olive-oil pz-mx-auto"></i> huile d'olive</span>
-            <span>{{oliveOilWeight}}g</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg">
-        <div class="ingredient i-bg-bigga">
-          <div>
-            <span>+ biga entière</span>
-            <span>{{biggaFlourWeight + biggaWaterWeight}}g</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
 
   <span id="forkongithub"><a href="https://github.com/orphaner/pizza-calculator">Fork me on GitHub</a></span>
 </div>
