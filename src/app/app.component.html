@@ -102,7 +102,6 @@
   </div>
 
   <h2 class="my-4">Ingrédients</h2>
-  <p><strong>Poids total de pâte:</strong> {{flourWeight + waterWeight}}g</p>
 
   <div class="row">
     <div class="col-12 col-lg-4">
@@ -118,15 +117,15 @@
           <span class="ingredient-label">Eau</span>
           <span class="ingredient-value">{{waterWeight}}g</span>
         </div>
-        <div class="ingredient-row i-bg-salt">
-          <i class="pz pz-salt"></i>
-          <span class="ingredient-label">Sel</span>
-          <span class="ingredient-value">{{saltWeight}}g</span>
-        </div>
         <div class="ingredient-row i-bg-yeast">
           <i class="pz pz-yeast"></i>
           <span class="ingredient-label">Levure</span>
           <span class="ingredient-value">{{yeastWeight}}g</span>
+        </div>
+        <div class="ingredient-row i-bg-salt">
+          <i class="pz pz-salt"></i>
+          <span class="ingredient-label">Sel</span>
+          <span class="ingredient-value">{{saltWeight}}g</span>
         </div>
         <div class="ingredient-row i-bg-olive-oil">
           <i class="pz pz-olive-oil"></i>
@@ -195,6 +194,8 @@
       </div>
     }
   </div>
+
+  <p class="dough-total mt-4"><strong>Poids total de pâte :</strong> {{flourWeight + waterWeight}}g</p>
 
   <span id="forkongithub"><a href="https://github.com/orphaner/pizza-calculator">Fork me on GitHub</a></span>
 </div>
