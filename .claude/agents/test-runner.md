@@ -23,6 +23,10 @@ you may get an ancient Node from the system and confusing unrelated errors.
 
 Never run `npm test` on its own — it starts Vitest in watch mode and hangs.
 Never start a dev server yourself; the Playwright config starts and stops one.
+Never run the interactive Playwright modes (`--ui`, `--headed`, `--debug`,
+`show-report`, `codegen`, or the `e2e:ui`/`e2e:headed`/`e2e:report` scripts) —
+they open a window and block until a human closes them. Only the plain
+`playwright test` run is usable here.
 
 If asked simply to "check everything", run unit, e2e, lint and build.
 

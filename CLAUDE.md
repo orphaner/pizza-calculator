@@ -27,6 +27,9 @@ npm run build:prod           # production build (AOT, optimizations)
 npm test                     # unit tests (Vitest, watch mode)
 ng test --watch=false        # CI-style single run
 npm run e2e                  # integration tests (Playwright, desktop + mobile)
+npm run e2e:ui               # Playwright UI mode (interactive; blocks until closed)
+npm run e2e:headed           # same run, visible browser (interactive)
+npm run e2e:report           # HTML report of the last run (interactive; serves a page)
 npm run lint                 # ESLint via Angular CLI (angular-eslint)
 ```
 
@@ -53,6 +56,13 @@ only take effect in the next session.
   pulling in WebKit.
 - The config's `webServer` starts and stops `npm start` itself, and reuses an
   already-running dev server outside CI. Never start one by hand for a test run.
+- Interactive equivalents of Cypress's runner: `npm run e2e:ui` (UI mode — pick
+  specs, step through actions, time-travel over a DOM snapshot per step, watch
+  mode on file changes), `npm run e2e:headed` (plain run, visible browser) and
+  `npm run e2e:report` (HTML report of the last run). Also `--debug` for the
+  Playwright Inspector and `npx playwright codegen localhost:4200` to record a
+  spec. All of these block until closed, so they are for a human at a keyboard
+  only — never for the `test-runner` subagent or any automated check.
 - `e2e/dough-calculator.spec.ts` covers the arithmetic through the UI: recompute
   on portion change, flour + water = total, the biga split adding back up to the
   complete dough, the checkbox showing/hiding the biga sections, and the flour
