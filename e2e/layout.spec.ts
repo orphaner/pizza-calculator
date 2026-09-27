@@ -77,6 +77,36 @@ test('no ingredient label wraps and no value is clipped', async ({ page }) => {
   expect(problems).toEqual([]);
 });
 
+test('no control is covered by another element', async ({ page }) => {
+  // The "Fork me on GitHub" ribbon is a rotated link inside a large, mostly
+  // empty box at z-index 9999; it silently swallowed clicks on whatever sat
+  // underneath. A green build, green unit tests and a correct-looking page all
+  // missed it, because nothing is visually wrong.
+  const inputs = page.locator('input');
+  const count = await inputs.count();
+  expect(count).toBeGreaterThan(0);
+
+  const blocked: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const input = inputs.nth(i);
+    // Playwright's scroll settles before the measurement; scrolling from inside
+    // page.evaluate does not, and elementFromPoint then reads a stale position
+    // and returns null for anything still off-screen.
+    await input.scrollIntoViewIfNeeded();
+    const problem = await input.evaluate((el: HTMLElement) => {
+      const box = el.getBoundingClientRect();
+      const top = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      if (top === el || el.contains(top)) return null;
+      const name = el.id || el.getAttribute('aria-label') || 'input';
+      const over = top instanceof HTMLElement ? top.id || top.className : 'nothing (point off-screen)';
+      return `${name} is covered by ${over}`;
+    });
+    if (problem) blocked.push(problem);
+  }
+
+  expect(blocked).toEqual([]);
+});
+
 test('the three sections are all present', async ({ page }) => {
   for (const section of SECTIONS) {
     await expect(columnFor(page, section)).toBeVisible();

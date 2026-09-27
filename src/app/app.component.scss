@@ -274,6 +274,14 @@
     overflow: hidden;
     height: 265px;
     z-index: 9999;
+    // The ribbon is a rotated link inside a 265x265 box that is empty almost
+    // everywhere, and at z-index 9999 that empty area swallowed clicks on
+    // anything underneath it. Only the link itself should be a target.
+    pointer-events: none;
+  }
+
+  #forkongithub a {
+    pointer-events: auto;
   }
   #forkongithub a {
     width: 265px;

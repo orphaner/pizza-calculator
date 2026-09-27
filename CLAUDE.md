@@ -103,6 +103,12 @@ only take effect in the next session.
   on. `.form-switch` did not exist in Bootstrap 4, so this depends on the BS5
   bump. `.setting-switch` undoes the offsets Bootstrap adds to position a switch
   against a label *inside* `.form-check` — here the label is the row's own.
+- The "Fork me on GitHub" ribbon is `pointer-events: none` with the link itself
+  back to `auto`. It is a rotated link inside a 265x265 box at `z-index: 9999`
+  that is empty almost everywhere, and that empty area silently swallowed clicks
+  on whatever sat under it. The layout spec "no control is covered by another
+  element" guards this: a green build, green unit tests and a correct-looking
+  page all missed it.
 - Every input carries a label (`<label for>` where there is one field per row,
   `aria-label` on the paired portion fields), which is what lets the e2e specs
   use `getByLabel` instead of the previous `tr` + `.nth(0)` positional lookups.
