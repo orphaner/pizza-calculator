@@ -10,7 +10,7 @@
           <span class="emoticon">👩‍🌾</span>
           <span class="setting-label">Adultes</span>
           <div class="setting-fields">
-            <input type="number" class="form-control setting-input" aria-label="Nombre de pâtons adultes"
+            <input type="number" min="0" class="form-control setting-input" aria-label="Nombre de pâtons adultes"
                    [(ngModel)]="adultCount" (ngModelChange)="valueChange()"/>
             <span class="setting-times">×</span>
             <div class="input-group setting-group">
@@ -24,7 +24,7 @@
           <span class="emoticon">👶</span>
           <span class="setting-label">Enfant</span>
           <div class="setting-fields">
-            <input type="number" class="form-control setting-input" aria-label="Nombre de pâtons enfant"
+            <input type="number" min="0" class="form-control setting-input" aria-label="Nombre de pâtons enfant"
                    [(ngModel)]="childCount" (ngModelChange)="valueChange()"/>
             <span class="setting-times">×</span>
             <div class="input-group setting-group">
