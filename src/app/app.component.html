@@ -14,7 +14,7 @@
                    [(ngModel)]="adultCount" (ngModelChange)="valueChange()"/>
             <span class="setting-times">×</span>
             <div class="input-group setting-group">
-              <input type="number" class="form-control setting-input" aria-label="Poids d'un pâton adulte"
+              <input type="number" step="10" min="0" class="form-control setting-input" aria-label="Poids d'un pâton adulte"
                      [(ngModel)]="adultWeight" (ngModelChange)="valueChange()"/>
               <span class="input-group-text">g</span>
             </div>
@@ -28,7 +28,7 @@
                    [(ngModel)]="childCount" (ngModelChange)="valueChange()"/>
             <span class="setting-times">×</span>
             <div class="input-group setting-group">
-              <input type="number" class="form-control setting-input" aria-label="Poids d'un pâton enfant"
+              <input type="number" step="10" min="0" class="form-control setting-input" aria-label="Poids d'un pâton enfant"
                      [(ngModel)]="childWeight" (ngModelChange)="valueChange()"/>
               <span class="input-group-text">g</span>
             </div>
