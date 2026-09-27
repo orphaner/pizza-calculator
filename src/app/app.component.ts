@@ -16,18 +16,28 @@ export class AppComponent implements OnInit {
   adultCount = 2;
   adultWeight = 220;
   childCount = 2;
-  childWeight = 50;
+  childWeight = 100;
 
-  paramWaterPercent = 60;
+  paramWaterPercent = 65;
   paramSaltPerFlourKg = 14;
   paramYeastPerFlourKg = 7;
   paramOliveOilPerFlourKg = 60;
+
+  useBigga = true;
+  biggaFlourPercent = 75;
 
   flourWeight = 0;
   waterWeight = 0;
   saltWeight = 0;
   yeastWeight = 0;
   oliveOilWeight = 0;
+
+  biggaFlourWeight = 0;
+  biggaWaterWeight = 0;
+  biggaYeastWeight = 0;
+  finalFlourWeight = 0;
+  finalWaterWeight = 0;
+  finalYeastWeight = 0;
 
 
   ngOnInit(): void {
@@ -48,5 +58,12 @@ export class AppComponent implements OnInit {
     this.yeastWeight = Math.round(this.yeastWeight * 100) / 100;
     this.oliveOilWeight = (this.flourWeight * this.paramOliveOilPerFlourKg) / 1000;
     this.oliveOilWeight = Math.round(this.oliveOilWeight * 100) / 100
+
+    this.biggaFlourWeight = Math.round(this.flourWeight * this.biggaFlourPercent / 100);
+    this.finalFlourWeight = this.flourWeight - this.biggaFlourWeight;
+    this.biggaWaterWeight = Math.round(this.biggaFlourWeight * 0.5);
+    this.finalWaterWeight = this.waterWeight - this.biggaWaterWeight;
+    this.biggaYeastWeight = Math.round(this.yeastWeight * this.biggaFlourPercent / 100 * 100) / 100;
+    this.finalYeastWeight = Math.round((this.yeastWeight - this.biggaYeastWeight) * 100) / 100;
   }
 }
