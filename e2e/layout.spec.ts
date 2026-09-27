@@ -3,7 +3,7 @@ import { test, expect, Page } from '@playwright/test';
 const SECTIONS = ['Ingrédients totaux', 'Biga — la veille', 'Pâte finale — jour J'];
 
 function columnFor(page: Page, section: string) {
-  return page.locator('.col-12', { has: page.getByRole('heading', { name: section }) });
+  return page.locator('.ingredients .col-12', { has: page.getByRole('heading', { name: section }) });
 }
 
 test.beforeEach(async ({ page }) => {
@@ -14,17 +14,24 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.setting-row').first()).toBeVisible();
 });
 
-test('no setting label wraps and no field is clipped', async ({ page }) => {
+test('every setting row stays on one level, unwrapped and unclipped', async ({ page }) => {
   // 2 portions + 4 dough parameters + the biga toggle + the biga flour share.
   await expect(page.locator('.setting-row')).toHaveCount(8);
 
   const problems = await page.evaluate(() =>
     [...document.querySelectorAll('.setting-row')].flatMap((row) => {
       const label = row.querySelector('.setting-label') as HTMLElement;
+      const fields = row.querySelector('.setting-fields, .setting-group, .setting-switch') as HTMLElement;
       const rowBox = row.getBoundingClientRect();
+      const labelBox = label.getBoundingClientRect();
       const lineHeight = parseFloat(getComputedStyle(label).lineHeight);
       const issues: string[] = [];
-      if (label.getBoundingClientRect().height > lineHeight * 1.5) issues.push('label wraps');
+      if (labelBox.height > lineHeight * 1.5) issues.push('label wraps');
+      // .setting-row is allowed to wrap as a safety net, but at every supported
+      // width the column should be wide enough that it does not need to.
+      if (Math.round(fields.getBoundingClientRect().top) > Math.round(labelBox.bottom) - 2) {
+        issues.push('fields pushed onto a second line');
+      }
       for (const field of row.querySelectorAll('input, .input-group-text')) {
         const box = field.getBoundingClientRect();
         if (box.right > rowBox.right - 1 || box.left < rowBox.left) issues.push('field clipped');
@@ -35,19 +42,39 @@ test('no setting label wraps and no field is clipped', async ({ page }) => {
   expect(problems).toEqual([]);
 });
 
-test('the two settings panels sit side by side on desktop and stack on mobile', async ({ page }, testInfo) => {
-  const portions = page.locator('.col-12', { has: page.getByRole('heading', { name: 'Portions' }) });
-  const params = page.locator('.col-12', { has: page.getByRole('heading', { name: 'Paramètres de la pâte' }) });
+test('the settings panels reflow with the viewport', async ({ page }, testInfo) => {
+  const panels = page.locator('.settings-col');
+  await expect(panels).toHaveCount(3);
 
-  const a = (await portions.boundingBox())!;
-  const b = (await params.boundingBox())!;
+  const boxes = async () => {
+    const out = [];
+    for (let i = 0; i < 3; i++) out.push((await panels.nth(i).boundingBox())!);
+    return out;
+  };
 
   if (testInfo.project.name === 'mobile') {
-    expect(b.y).toBeGreaterThanOrEqual(a.y + a.height);
-  } else {
-    expect(b.y).toBe(a.y);
-    expect(b.x).toBeGreaterThan(a.x);
+    const b = await boxes();
+    for (let i = 1; i < b.length; i++) {
+      expect(b[i].y).toBeGreaterThanOrEqual(b[i - 1].y + b[i - 1].height);
+    }
+    return;
   }
+
+  // From xxl up, three across.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  let b = await boxes();
+  expect(b[1].y).toBe(b[0].y);
+  expect(b[2].y).toBe(b[0].y);
+  expect(b[1].x).toBeGreaterThan(b[0].x);
+  expect(b[2].x).toBeGreaterThan(b[1].x);
+
+  // Below it, a third of the page is too narrow for a label plus its fields, so
+  // the grid drops to two across and the biga panel moves to a new line.
+  await page.setViewportSize({ width: 1280, height: 900 });
+  b = await boxes();
+  expect(b[1].y).toBe(b[0].y);
+  expect(b[1].x).toBeGreaterThan(b[0].x);
+  expect(b[2].y).toBeGreaterThan(b[0].y);
 });
 
 test('the page never scrolls horizontally', async ({ page }) => {

@@ -2,13 +2,13 @@
 
   <h2 class="my-4">Pâte à pizza</h2>
 
-  <div class="row">
-    <div class="col-12 col-lg-6">
+  <div class="row settings">
+    <div class="col-12 col-lg-6 col-xxl-4 settings-col">
       <h5 class="mb-3">🍽️ Portions</h5>
       <div class="setting-list">
         <div class="setting-row s-bg-portion">
           <span class="emoticon">👩‍🌾</span>
-          <span class="setting-label">Pâtons adultes</span>
+          <span class="setting-label">Adultes</span>
           <div class="setting-fields">
             <input type="number" class="form-control setting-input" aria-label="Nombre de pâtons adultes"
                    [(ngModel)]="adultCount" (ngModelChange)="valueChange()"/>
@@ -22,7 +22,7 @@
         </div>
         <div class="setting-row s-bg-portion">
           <span class="emoticon">👶</span>
-          <span class="setting-label">Pâtons enfant</span>
+          <span class="setting-label">Enfant</span>
           <div class="setting-fields">
             <input type="number" class="form-control setting-input" aria-label="Nombre de pâtons enfant"
                    [(ngModel)]="childCount" (ngModelChange)="valueChange()"/>
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-6 col-xxl-4 settings-col">
       <h5 class="mb-3 mt-4 mt-lg-0">⚙️ Paramètres de la pâte</h5>
       <div class="setting-list">
         <div class="setting-row s-bg-water">
@@ -49,21 +49,21 @@
             <span class="input-group-text">%</span>
           </div>
         </div>
-        <div class="setting-row s-bg-salt">
-          <i class="pz pz-salt"></i>
-          <label class="setting-label" for="paramSaltPerFlourKg">Sel</label>
-          <div class="input-group setting-group">
-            <input id="paramSaltPerFlourKg" type="number" class="form-control setting-input"
-                   [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange()"/>
-            <span class="input-group-text">g/kg</span>
-          </div>
-        </div>
         <div class="setting-row s-bg-yeast">
           <i class="pz pz-yeast"></i>
           <label class="setting-label" for="paramYeastPerFlourKg">Levure</label>
           <div class="input-group setting-group">
             <input id="paramYeastPerFlourKg" type="number" class="form-control setting-input"
                    [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange()"/>
+            <span class="input-group-text">g/kg</span>
+          </div>
+        </div>
+        <div class="setting-row s-bg-salt">
+          <i class="pz pz-salt"></i>
+          <label class="setting-label" for="paramSaltPerFlourKg">Sel</label>
+          <div class="input-group setting-group">
+            <input id="paramSaltPerFlourKg" type="number" class="form-control setting-input"
+                   [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange()"/>
             <span class="input-group-text">g/kg</span>
           </div>
         </div>
@@ -76,6 +76,12 @@
             <span class="input-group-text">g/kg</span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 col-xxl-4 settings-col">
+      <h5 class="mb-3 mt-4 mt-lg-0">🍞 Biga</h5>
+      <div class="setting-list">
         <div class="setting-row s-bg-bigga">
           <i class="pz pz-bigga"></i>
           <label class="setting-label" for="useBigga">Préparer avec une biga</label>
@@ -101,7 +107,7 @@
 
   <h2 class="my-4">Ingrédients</h2>
 
-  <div class="row">
+  <div class="row ingredients">
     <div class="col-12 col-lg-4">
       <h5 class="mb-3">
         @if (useBigga) {

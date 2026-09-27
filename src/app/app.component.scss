@@ -10,7 +10,11 @@
 .setting-row {
   display: flex;
   align-items: center;
-  gap: .75rem;
+  // Let the fields drop under the label whenever they no longer fit beside it,
+  // rather than picking a breakpoint: the row is as narrow as its column, and
+  // the columns change with the layout. The label itself never wraps.
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
   padding: .5rem 1rem;
   background-color: #fff;
   border: 1px solid #e9e9e9;
@@ -30,6 +34,7 @@
 .setting-label {
   flex: 1 1 auto;
   margin-bottom: 0;
+  white-space: nowrap;
   font-size: 1.05rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -40,6 +45,14 @@
   display: flex;
   align-items: center;
   gap: .375rem;
+}
+
+/* Keeps the fields on the right edge whether they sit beside the label or on
+   their own line below it. */
+.setting-fields,
+.setting-row > .setting-group,
+.setting-switch {
+  margin-left: auto;
 }
 
 .setting-times {
@@ -69,25 +82,9 @@
   background-color: #f6f6f6;
 }
 
-/* Narrow screens: let the fields drop under the label rather than squeezing it
-   onto two lines, which is what the old table did. */
 @media (max-width: 575.98px) {
-  .setting-row {
-    flex-wrap: wrap;
-  }
-
   .setting-label {
     font-size: .95rem;
-  }
-
-  .setting-fields,
-  .setting-row > .setting-group {
-    flex: 1 1 100%;
-    justify-content: flex-end;
-  }
-
-  .setting-row > .setting-group {
-    display: flex;
   }
 }
 
@@ -159,7 +156,13 @@
 
 /* Colors (left border of each row). A parameter wears the color of the
    ingredient it drives, which links the setting to its output visually. */
-.s-bg-portion,
+/* Portions are not an ingredient, so they stay deliberately neutral rather than
+   borrowing the flour amber they used to share with it — the colored borders
+   below all mean "this is that ingredient". */
+.s-bg-portion {
+  border-left-color: #adb5bd;
+}
+
 .i-bg-flour {
   border-left-color: #fdca74;
 }
@@ -276,7 +279,8 @@
     z-index: 9999;
     // The ribbon is a rotated link inside a 265x265 box that is empty almost
     // everywhere, and at z-index 9999 that empty area swallowed clicks on
-    // anything underneath it. Only the link itself should be a target.
+    // anything underneath it — which is what broke the biga switch when it
+    // moved into the top-right column. Only the link itself should be a target.
     pointer-events: none;
   }
 

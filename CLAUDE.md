@@ -83,32 +83,47 @@ only take effect in the next session.
   Docker image. These suites are local-only until that changes.
 
 ## Settings UI (portions + dough parameters)
-- The two `<tabset>` tabs were replaced by two `col-lg-6` panels shown at once
-  (stacked on mobile). `<tabset>` was the **only** use of `ngx-bootstrap` in the
-  app, so the dependency was removed entirely along with it.
+- The two `<tabset>` tabs were replaced by three panels shown at once —
+  Portions, Paramètres de la pâte, Biga — mirroring the three ingredient columns
+  below. They are `col-12 col-lg-6 col-xxl-4`: three across only from 1400px up.
+  A settings row carries input fields as well as a label, so a third of a
+  narrower page cannot hold one on a single line — measured, not guessed: at
+  992px the usable row width is ~264px against ~283px of content. Below xxl the
+  grid falls back to two across, with the biga panel on a second line. `<tabset>` was the **only** use of
+  `ngx-bootstrap` in the app, so the dependency was removed entirely with it.
+- The settings row is `.row.settings` (panels marked `.settings-col`) and the
+  ingredients row is `.row.ingredients`. That scoping matters: both rows contain
+  a column headed "Biga", so an unscoped `.col-12` + heading lookup matches two
+  elements and fails Playwright's strict mode. The specs use
+  `.ingredients .col-12` and `.settings-col`.
 - Both panels use `.setting-row`, a deliberate mirror of `.ingredient-row`:
   same white card, 1px border, `.5rem` radius, and a `.625rem` colored left
   border. A parameter wears the color of the ingredient it drives (hydration →
-  water blue, salt → salt teal, …), which is why `.s-bg-*` and `.i-bg-*` share
-  one declaration block in `app.component.scss`.
+  water blue, salt → salt teal, …), which is why most `.s-bg-*` and `.i-bg-*`
+  pairs share one declaration block in `app.component.scss`. Portions are the
+  exception: they are not an ingredient, so they stay a neutral grey rather than
+  borrowing the flour amber.
 - Fields are sized for their content (`width: 4.5rem`, right-aligned) with the
   unit as an `input-group-text` suffix, replacing the old table's full-width
   inputs and its separate "Unité" column.
-- Below 576px `.setting-row` wraps so the fields drop under the label. Without
-  that, "Pâtons adultes" wrapped onto two lines at 390px — the exact bug this
-  rework fixed, now covered by a layout spec.
-- The biga toggle is the last dough parameter: a `.setting-row` whose control is
-  a Bootstrap 5 `.form-check.form-switch` instead of a number field, with
-  "Farine en biga" appearing right below it as one more parameter row when it is
-  on. `.form-switch` did not exist in Bootstrap 4, so this depends on the BS5
-  bump. `.setting-switch` undoes the offsets Bootstrap adds to position a switch
-  against a label *inside* `.form-check` — here the label is the row's own.
+- `.setting-row` wraps so the fields drop under the label when they no longer
+  fit beside it — a safety net with no breakpoint in it, since the row is only
+  ever as wide as its column. A layout spec asserts that at the supported widths
+  the net is never actually needed. The portion labels are "Adultes"/"Enfant"
+  rather than "Pâtons adultes"/"Pâtons enfant" for the same reason (the column
+  heading already says Portions); the full wording lives on in their aria-labels.
 - The "Fork me on GitHub" ribbon is `pointer-events: none` with the link itself
   back to `auto`. It is a rotated link inside a 265x265 box at `z-index: 9999`
   that is empty almost everywhere, and that empty area silently swallowed clicks
-  on whatever sat under it. The layout spec "no control is covered by another
-  element" guards this: a green build, green unit tests and a correct-looking
-  page all missed it.
+  on whatever sat under it — which is how moving the biga switch into the
+  top-right column appeared to "break" it. The layout spec
+  "no control is covered by another element" guards this: a green build, green
+  unit tests and a correct-looking page all missed it.
+- The biga has its own panel: a `.setting-row` whose control is a Bootstrap 5
+  `.form-check.form-switch` instead of a number field, with "Farine en biga"
+  appearing below it as a second row when it is on. `.form-switch` did not exist in Bootstrap 4, so this depends on the BS5
+  bump. `.setting-switch` undoes the offsets Bootstrap adds to position a switch
+  against a label *inside* `.form-check` — here the label is the row's own.
 - Every input carries a label (`<label for>` where there is one field per row,
   `aria-label` on the paired portion fields), which is what lets the e2e specs
   use `getByLabel` instead of the previous `tr` + `.nth(0)` positional lookups.

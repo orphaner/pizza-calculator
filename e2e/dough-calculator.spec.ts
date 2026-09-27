@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 
 /** Reads one ingredient value, e.g. weightIn(page, 'Ingrédients totaux', 'Farine') -> 388 */
 async function weightIn(page: Page, section: string, ingredient: string): Promise<number> {
-  const column = page.locator('.col-12', { has: page.getByRole('heading', { name: section }) });
+  const column = page.locator('.ingredients .col-12', { has: page.getByRole('heading', { name: section }) });
   const row = column.locator('.ingredient-row', { hasText: ingredient });
   const text = await row.locator('.ingredient-value').innerText();
   return Number(text.replace('g', '').replace(',', '.'));
@@ -61,7 +61,7 @@ test('the biga split adds back up to the complete dough', async ({ page }) => {
   expect(bigaWater).toBe(Math.round(bigaFlour * 0.5));
 
   // Salt and oil belong entirely to the final dough, never to the biga.
-  await expect(page.locator('.col-12', { has: page.getByRole('heading', { name: 'Biga' }) })
+  await expect(page.locator('.ingredients .col-12', { has: page.getByRole('heading', { name: 'Biga' }) })
     .locator('.ingredient-row', { hasText: 'Sel' })).toHaveCount(0);
 });
 
