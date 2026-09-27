@@ -8,9 +8,9 @@ async function weightIn(page: Page, section: string, ingredient: string): Promis
   return Number(text.replace('g', '').replace(',', '.'));
 }
 
-async function setPortion(page: Page, label: string, field: 'count' | 'weight', value: string) {
-  const row = page.locator('tr', { hasText: label });
-  await row.locator('input[type="number"]').nth(field === 'count' ? 0 : 1).fill(value);
+async function setPortion(page: Page, who: 'adultes' | 'enfant', field: 'count' | 'weight', value: string) {
+  const label = field === 'count' ? `Nombre de pâtons ${who}` : `Poids d'un pâton ${who}`;
+  await page.getByLabel(label).fill(value);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -21,7 +21,7 @@ test('recomputes the ingredients when a portion changes', async ({ page }) => {
   await expect(page.getByText('Poids total de pâte : 640g')).toBeVisible();
   const flourBefore = await weightIn(page, 'Ingrédients totaux', 'Farine');
 
-  await setPortion(page, 'Pâtons adultes', 'count', '5');
+  await setPortion(page, 'adultes', 'count', '5');
 
   // 5 x 220 + 2 x 100 = 1300
   await expect(page.getByText('Poids total de pâte : 1300g')).toBeVisible();
@@ -29,8 +29,8 @@ test('recomputes the ingredients when a portion changes', async ({ page }) => {
 });
 
 test('flour and water always add up to the total dough weight', async ({ page }) => {
-  await setPortion(page, 'Pâtons adultes', 'count', '3');
-  await setPortion(page, 'Pâtons enfant', 'count', '1');
+  await setPortion(page, 'adultes', 'count', '3');
+  await setPortion(page, 'enfant', 'count', '1');
 
   const flour = await weightIn(page, 'Ingrédients totaux', 'Farine');
   const water = await weightIn(page, 'Ingrédients totaux', 'Eau');
@@ -76,8 +76,7 @@ test('the biga sections appear and disappear with the checkbox', async ({ page }
   await expect(totalsHeading).toBeVisible();
   await expect(sameDayHeading).toHaveCount(0);
 
-  await page.getByRole('tab', { name: 'Paramètres de la pâte' }).click();
-  const checkbox = page.locator('input[type="checkbox"]');
+  const checkbox = page.getByLabel('Préparer avec une biga');
   await expect(checkbox).toBeChecked();
 
   await checkbox.uncheck();
@@ -95,9 +94,7 @@ test('the biga sections appear and disappear with the checkbox', async ({ page }
 test('changing the biga flour share moves flour between the two stages', async ({ page }) => {
   const totalFlour = await weightIn(page, 'Ingrédients totaux', 'Farine');
 
-  await page.getByRole('tab', { name: 'Paramètres de la pâte' }).click();
-  const share = page.locator('tr', { hasText: 'Farine en biga' }).locator('input[type="number"]');
-  await share.fill('50');
+  await page.getByLabel('Farine en biga').fill('50');
 
   const bigaFlour = await weightIn(page, 'Biga', 'Farine');
   const finalFlour = await weightIn(page, 'Pâte finale', 'Farine');

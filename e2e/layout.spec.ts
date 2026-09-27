@@ -8,9 +8,46 @@ function columnFor(page: Page, section: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
-  // Guard: several checks below inspect every .ingredient-row, and would pass
-  // vacuously if the app failed to render at all.
+  // Guard: several checks below inspect every .ingredient-row / .setting-row,
+  // and would pass vacuously if the app failed to render at all.
   await expect(page.locator('.ingredient-row').first()).toBeVisible();
+  await expect(page.locator('.setting-row').first()).toBeVisible();
+});
+
+test('no setting label wraps and no field is clipped', async ({ page }) => {
+  // 2 portions + 4 dough parameters + the biga toggle + the biga flour share.
+  await expect(page.locator('.setting-row')).toHaveCount(8);
+
+  const problems = await page.evaluate(() =>
+    [...document.querySelectorAll('.setting-row')].flatMap((row) => {
+      const label = row.querySelector('.setting-label') as HTMLElement;
+      const rowBox = row.getBoundingClientRect();
+      const lineHeight = parseFloat(getComputedStyle(label).lineHeight);
+      const issues: string[] = [];
+      if (label.getBoundingClientRect().height > lineHeight * 1.5) issues.push('label wraps');
+      for (const field of row.querySelectorAll('input, .input-group-text')) {
+        const box = field.getBoundingClientRect();
+        if (box.right > rowBox.right - 1 || box.left < rowBox.left) issues.push('field clipped');
+      }
+      return issues.length ? [`${label.textContent?.trim()}: ${issues.join(', ')}`] : [];
+    }),
+  );
+  expect(problems).toEqual([]);
+});
+
+test('the two settings panels sit side by side on desktop and stack on mobile', async ({ page }, testInfo) => {
+  const portions = page.locator('.col-12', { has: page.getByRole('heading', { name: 'Portions' }) });
+  const params = page.locator('.col-12', { has: page.getByRole('heading', { name: 'Paramètres de la pâte' }) });
+
+  const a = (await portions.boundingBox())!;
+  const b = (await params.boundingBox())!;
+
+  if (testInfo.project.name === 'mobile') {
+    expect(b.y).toBeGreaterThanOrEqual(a.y + a.height);
+  } else {
+    expect(b.y).toBe(a.y);
+    expect(b.x).toBeGreaterThan(a.x);
+  }
 });
 
 test('the page never scrolls horizontally', async ({ page }) => {

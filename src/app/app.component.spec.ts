@@ -45,6 +45,6 @@ describe('AppComponent', () => {
         adultCountInput.dispatchEvent(new Event('input'));
         await fixture.whenStable();
 
-        expect(compiled.querySelector('p').textContent).toContain('1300g');
+        expect(compiled.querySelector('.dough-total').textContent).toContain('1300g');
     });
 });

@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {TabsModule} from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'app-root',
@@ -8,7 +7,7 @@ import {TabsModule} from 'ngx-bootstrap/tabs';
     styleUrls: ['./app.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [FormsModule, TabsModule]
+    imports: [FormsModule]
 })
 export class AppComponent implements OnInit {
   title = 'pizza-calculator';

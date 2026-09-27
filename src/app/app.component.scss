@@ -1,10 +1,117 @@
-/* Tabset */
-.tabset-tab {
-  background-color: white;
-  //min-height: 10rem;
-  padding: 1rem;
-  border: 1px solid #dee2e6;
-  border-top: inherit;
+/* SETTING ROWS (portions + dough parameters) — same card language as the
+   ingredient rows below, so the whole page reads as one system. */
+.setting-list {
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+  max-width: 32rem;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .5rem 1rem;
+  background-color: #fff;
+  border: 1px solid #e9e9e9;
+  border-left-width: .625rem;
+  border-radius: .5rem;
+}
+
+.setting-row .pz,
+.setting-row .emoticon {
+  flex: 0 0 auto;
+  width: 2.25rem;
+  font-size: 1.85rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.setting-label {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  font-size: 1.05rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.setting-fields {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+}
+
+.setting-times {
+  color: #adb5bd;
+}
+
+/* A number here is never more than 3 digits — size the field for its content,
+   not for the column it used to sit in. */
+.setting-input,
+.setting-group .setting-input {
+  flex: 0 0 auto;
+  width: 4.5rem;
+  text-align: right;
+  font-weight: bold;
+  color: #545b62;
+}
+
+.setting-group {
+  flex: 0 0 auto;
+  width: auto;
+  flex-wrap: nowrap;
+}
+
+.setting-group .input-group-text {
+  font-size: .85rem;
+  color: #6c757d;
+  background-color: #f6f6f6;
+}
+
+/* Narrow screens: let the fields drop under the label rather than squeezing it
+   onto two lines, which is what the old table did. */
+@media (max-width: 575.98px) {
+  .setting-row {
+    flex-wrap: wrap;
+  }
+
+  .setting-label {
+    font-size: .95rem;
+  }
+
+  .setting-fields,
+  .setting-row > .setting-group {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+
+  .setting-row > .setting-group {
+    display: flex;
+  }
+}
+
+/* The biga toggle is a parameter row like the others, but its control is a
+   Bootstrap 5 switch instead of a number field. Bootstrap positions the switch
+   relative to a label inside .form-check; here the label is the row's own, so
+   the offsets it adds have to be undone. */
+.setting-switch {
+  flex: 0 0 auto;
+  min-height: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  font-size: 1.15rem;
+}
+
+.setting-switch .form-check-input {
+  float: none;
+  margin-top: 0;
+  margin-left: 0;
+  cursor: pointer;
+}
+
+.setting-label[for='useBigga'] {
+  cursor: pointer;
 }
 
 /* INGREDIENT ROWS */
@@ -50,45 +157,39 @@
   color: #545b62;
 }
 
-/* Colors (left border of each ingredient row) */
+/* Colors (left border of each row). A parameter wears the color of the
+   ingredient it drives, which links the setting to its output visually. */
+.s-bg-portion,
 .i-bg-flour {
   border-left-color: #fdca74;
 }
 
+.s-bg-water,
 .i-bg-water {
   border-left-color: #80e2ff;
 }
 
+.s-bg-salt,
 .i-bg-salt {
   border-left-color: #4cc7b3;
 }
 
+.s-bg-yeast,
 .i-bg-yeast {
   border-left-color: #55c2e3;
 }
 
+.s-bg-olive-oil,
 .i-bg-olive-oil {
   border-left-color: rgb(255, 224, 125);
 }
 
+.s-bg-bigga,
 .i-bg-bigga {
   border-left-color: #c9a876;
 }
 
-/* Table custom colors */
-.table-hover tbody tr:hover {
-  background-color: #fff5e5;
-}
-
 /* SVG Icons */
-.pa:before {
-  display: inline-block;
-  content: ' ';
-  background-size: 1.5rem 1.5rem;
-  height: 1.5rem;
-  width: 1.5rem;
-}
-
 .pz:before {
   display: block;
   content: ' ';

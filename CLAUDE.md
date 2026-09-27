@@ -3,12 +3,12 @@
 Guidance for Claude Code when working in this repository.
 
 ## Project overview
-- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`unit-test` builders — all standalone, no NgModule), ESLint, Vitest (unit) + Playwright (integration), ngx-bootstrap, Bootstrap
+- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`unit-test` builders — all standalone, no NgModule), ESLint, Vitest (unit) + Playwright (integration), Bootstrap
 - Single standalone component: `src/app/app.component.ts` computes dough ingredient weights (flour/water/salt/yeast/olive oil) from portion counts and hydration parameters; bootstrapped directly via `bootstrapApplication` in `src/main.ts` (no `app.module.ts`)
 - **Zoneless**: no `zone.js`, `provideZonelessChangeDetection()` in `src/main.ts`. Change detection relies entirely on Angular's own event-binding notifications (`(ngModelChange)`, `(click)`, etc. all mark the view dirty on their own) — there is nothing to configure per-component for this to work, but any code that mutates component state from *outside* an Angular-triggered callback (raw `setTimeout`, a non-Angular event listener, a promise not awaited through Angular APIs) would silently fail to update the view and needs a manual `ChangeDetectorRef.markForCheck()`/signal.
 - Build output: `dist/pizza-calculator/browser` (path set in `angular.json`; the `application` builder nests output under `browser/` as of Angular 18)
 - Production: Docker build (`Dockerfile`) → static files served by NGINX
-- Upgraded from Angular 9 → 22 in one pass (`ng update` one major at a time). `ngx-bootstrap` majors track Angular majors 1:1 from v8 onward, so it was bumped in lockstep at every step.
+- Upgraded from Angular 9 → 22 in one pass (`ng update` one major at a time). `ngx-bootstrap` majors track Angular majors 1:1 from v8 onward, so it was bumped in lockstep at every step (it has since been removed entirely — see "Settings UI" below).
 
 ## Tooling / Node version
 - Node version is managed by [mise](https://mise.jdx.dev/), pinned in `mise.toml` (currently 24.21.0) — this is the single source of truth (no `.nvmrc`). Run `mise install` once per checkout.
@@ -50,8 +50,8 @@ only take effect in the next session.
 
 ## Integration tests (Playwright)
 - Config: `playwright.config.ts`, specs in `e2e/`. Two projects, `desktop`
-  (Chrome) and `mobile` (Pixel 7, 412px), so every spec runs twice — 10 specs,
-  20 runs. Only Chromium is installed (`npx playwright install chromium`); the
+  (Chrome) and `mobile` (Pixel 7, 412px), so every spec runs twice — 12 specs,
+  24 runs. Only Chromium is installed (`npx playwright install chromium`); the
   `mobile` project uses a Chromium-backed device descriptor on purpose, to avoid
   pulling in WebKit.
 - The config's `webServer` starts and stops `npm start` itself, and reuses an
@@ -68,18 +68,47 @@ only take effect in the next session.
   complete dough, the checkbox showing/hiding the biga sections, and the flour
   share moving flour between stages.
 - `e2e/layout.spec.ts` covers what unit tests structurally cannot: no horizontal
-  scroll, no wrapped label or clipped value, the total sitting below every
-  section, and sections stacking on mobile vs sitting side by side on desktop.
-  These formalise checks that were previously done by hand over CDP.
-- The layout specs inspect *every* `.ingredient-row`, so they would pass
-  vacuously on a blank page. `beforeEach` asserts a row is visible and one spec
-  asserts the exact row count (14) to keep that from happening — preserve those
-  guards when editing.
+  scroll, no wrapped label or clipped value (for both `.ingredient-row` and
+  `.setting-row`), the total sitting below every section, and sections stacking
+  on mobile vs sitting side by side on desktop. These formalise checks that were
+  previously done by hand over CDP.
+- The layout specs inspect *every* `.ingredient-row` / `.setting-row`, so they
+  would pass vacuously on a blank page. `beforeEach` asserts a row of each kind
+  is visible and two specs assert the exact row counts (14 and 7) to keep that
+  from happening — preserve those guards when editing.
 - Suite was validated by mutation: changing the biga hydration from `* 0.5` to
   `* 0.6` made exactly the biga-split spec fail (expected 146, got 175) while
   the other 18 stayed green, which is the intended blast radius.
 - CI does not run any tests today — the workflow only builds and pushes the
   Docker image. These suites are local-only until that changes.
+
+## Settings UI (portions + dough parameters)
+- The two `<tabset>` tabs were replaced by two `col-lg-6` panels shown at once
+  (stacked on mobile). `<tabset>` was the **only** use of `ngx-bootstrap` in the
+  app, so the dependency was removed entirely along with it.
+- Both panels use `.setting-row`, a deliberate mirror of `.ingredient-row`:
+  same white card, 1px border, `.5rem` radius, and a `.625rem` colored left
+  border. A parameter wears the color of the ingredient it drives (hydration →
+  water blue, salt → salt teal, …), which is why `.s-bg-*` and `.i-bg-*` share
+  one declaration block in `app.component.scss`.
+- Fields are sized for their content (`width: 4.5rem`, right-aligned) with the
+  unit as an `input-group-text` suffix, replacing the old table's full-width
+  inputs and its separate "Unité" column.
+- Below 576px `.setting-row` wraps so the fields drop under the label. Without
+  that, "Pâtons adultes" wrapped onto two lines at 390px — the exact bug this
+  rework fixed, now covered by a layout spec.
+- The biga toggle is the last dough parameter: a `.setting-row` whose control is
+  a Bootstrap 5 `.form-check.form-switch` instead of a number field, with
+  "Farine en biga" appearing right below it as one more parameter row when it is
+  on. `.form-switch` did not exist in Bootstrap 4, so this depends on the BS5
+  bump. `.setting-switch` undoes the offsets Bootstrap adds to position a switch
+  against a label *inside* `.form-check` — here the label is the row's own.
+- Every input carries a label (`<label for>` where there is one field per row,
+  `aria-label` on the paired portion fields), which is what lets the e2e specs
+  use `getByLabel` instead of the previous `tr` + `.nth(0)` positional lookups.
+- `src/styles.scss` dropped the `tables` and `nav` partials with this change —
+  `nav` existed only for the tabset's `ul.nav-tabs` and `tables` only for the
+  two parameter tables. Re-add them if a table or nav ever comes back.
 
 ## Docker
 ```bash

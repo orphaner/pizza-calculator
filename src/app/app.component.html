@@ -1,103 +1,101 @@
 <div class="container mt-4">
 
   <h2 class="my-4">Pâte à pizza</h2>
-  <div class="row clearfix">
-    <div class="col-md-12 column">
-      <tabset>
-        <tab heading="Portions" class="tabset-tab">
-          <table class="table table-hover">
-            <thead>
-            <tr>
-              <th class="text-center">#</th>
-              <th class="text-center">Quantité</th>
-              <th class="text-center">Poids en grammes</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="align-middle"><span class="emoticon">👩‍🌾</span> Pâtons adultes</td>
-              <td>
-                <input type="number" [(ngModel)]="adultCount" (ngModelChange)="valueChange()" class="form-control"/>
-              </td>
-              <td>
-                <input type="number" [(ngModel)]="adultWeight" (ngModelChange)="valueChange()" class="form-control"/>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle"><span class="emoticon">👶</span> Pâtons enfant</td>
-              <td>
-                <input type="number" [(ngModel)]="childCount" (ngModelChange)="valueChange()" class="form-control"/>
-              </td>
-              <td>
-                <input type="number" [(ngModel)]="childWeight" (ngModelChange)="valueChange()" class="form-control"/>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </tab>
-        <tab heading="Paramètres de la pâte" class="tabset-tab">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th class="text-center">Paramètre</th>
-                <th class="text-center">Valeur</th>
-                <th class="text-center">Unité</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td class="align-middle"><i class="pa pz-water"></i> Taux d'hydratation</td>
-                <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange()"
-                        class="form-control"/>
-                </td>
-                <td class="align-middle">% du poids de farine en eau</td>
-              </tr>
-              <tr>
-                <td class="align-middle"><i class="pa pz-salt"></i> Sel</td>
-                <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange()"
-                        class="form-control"/>
-                </td>
-                <td class="align-middle">grammes par kilo de farine</td>
-              </tr>
-              <tr>
-                <td class="align-middle"><i class="pa pz-yeast"></i> Levure</td>
-                <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange()"
-                        class="form-control"/>
-                </td>
-                <td class="align-middle">grammes par kilo de farine</td>
-              </tr>
-              <tr>
-                <td class="align-middle"><i class="pa pz-olive-oil"></i> Huile d'olive</td>
-                <td class="align-middle">
-                  <input type="number" [(ngModel)]="paramOliveOilPerFlourKg" (ngModelChange)="valueChange()"
-                        class="form-control"/>
-                </td>
-                <td class="align-middle">grammes par kilo de farine</td>
-              </tr>
-              <tr>
-                <td class="align-middle">🍞 Préparer avec une biga</td>
-                <td class="align-middle">
-                  <input type="checkbox" [(ngModel)]="useBigga" (ngModelChange)="valueChange()"/>
-                </td>
-                <td class="align-middle">pré-fermentation la veille</td>
-              </tr>
-              @if (useBigga) {
-                <tr>
-                  <td class="align-middle">Farine en biga</td>
-                  <td class="align-middle">
-                    <input type="number" min="1" max="99" [(ngModel)]="biggaFlourPercent" (ngModelChange)="valueChange()"
-                          class="form-control"/>
-                  </td>
-                  <td class="align-middle">% de la farine totale</td>
-                </tr>
-              }
-              </tbody>
-            </table>
-        </tab>
-      </tabset>
+
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <h5 class="mb-3">🍽️ Portions</h5>
+      <div class="setting-list">
+        <div class="setting-row s-bg-portion">
+          <span class="emoticon">👩‍🌾</span>
+          <span class="setting-label">Pâtons adultes</span>
+          <div class="setting-fields">
+            <input type="number" class="form-control setting-input" aria-label="Nombre de pâtons adultes"
+                   [(ngModel)]="adultCount" (ngModelChange)="valueChange()"/>
+            <span class="setting-times">×</span>
+            <div class="input-group setting-group">
+              <input type="number" class="form-control setting-input" aria-label="Poids d'un pâton adulte"
+                     [(ngModel)]="adultWeight" (ngModelChange)="valueChange()"/>
+              <span class="input-group-text">g</span>
+            </div>
+          </div>
+        </div>
+        <div class="setting-row s-bg-portion">
+          <span class="emoticon">👶</span>
+          <span class="setting-label">Pâtons enfant</span>
+          <div class="setting-fields">
+            <input type="number" class="form-control setting-input" aria-label="Nombre de pâtons enfant"
+                   [(ngModel)]="childCount" (ngModelChange)="valueChange()"/>
+            <span class="setting-times">×</span>
+            <div class="input-group setting-group">
+              <input type="number" class="form-control setting-input" aria-label="Poids d'un pâton enfant"
+                     [(ngModel)]="childWeight" (ngModelChange)="valueChange()"/>
+              <span class="input-group-text">g</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <h5 class="mb-3 mt-4 mt-lg-0">⚙️ Paramètres de la pâte</h5>
+      <div class="setting-list">
+        <div class="setting-row s-bg-water">
+          <i class="pz pz-water"></i>
+          <label class="setting-label" for="paramWaterPercent">Taux d'hydratation</label>
+          <div class="input-group setting-group">
+            <input id="paramWaterPercent" type="number" class="form-control setting-input"
+                   [(ngModel)]="paramWaterPercent" (ngModelChange)="valueChange()"/>
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="setting-row s-bg-salt">
+          <i class="pz pz-salt"></i>
+          <label class="setting-label" for="paramSaltPerFlourKg">Sel</label>
+          <div class="input-group setting-group">
+            <input id="paramSaltPerFlourKg" type="number" class="form-control setting-input"
+                   [(ngModel)]="paramSaltPerFlourKg" (ngModelChange)="valueChange()"/>
+            <span class="input-group-text">g/kg</span>
+          </div>
+        </div>
+        <div class="setting-row s-bg-yeast">
+          <i class="pz pz-yeast"></i>
+          <label class="setting-label" for="paramYeastPerFlourKg">Levure</label>
+          <div class="input-group setting-group">
+            <input id="paramYeastPerFlourKg" type="number" class="form-control setting-input"
+                   [(ngModel)]="paramYeastPerFlourKg" (ngModelChange)="valueChange()"/>
+            <span class="input-group-text">g/kg</span>
+          </div>
+        </div>
+        <div class="setting-row s-bg-olive-oil">
+          <i class="pz pz-olive-oil"></i>
+          <label class="setting-label" for="paramOliveOilPerFlourKg">Huile d'olive</label>
+          <div class="input-group setting-group">
+            <input id="paramOliveOilPerFlourKg" type="number" class="form-control setting-input"
+                   [(ngModel)]="paramOliveOilPerFlourKg" (ngModelChange)="valueChange()"/>
+            <span class="input-group-text">g/kg</span>
+          </div>
+        </div>
+        <div class="setting-row s-bg-bigga">
+          <i class="pz pz-bigga"></i>
+          <label class="setting-label" for="useBigga">Préparer avec une biga</label>
+          <div class="form-check form-switch setting-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="useBigga"
+                   [(ngModel)]="useBigga" (ngModelChange)="valueChange()"/>
+          </div>
+        </div>
+        @if (useBigga) {
+          <div class="setting-row s-bg-bigga">
+            <i class="pz pz-flour"></i>
+            <label class="setting-label" for="biggaFlourPercent">Farine en biga</label>
+            <div class="input-group setting-group">
+              <input id="biggaFlourPercent" type="number" min="1" max="99" class="form-control setting-input"
+                     [(ngModel)]="biggaFlourPercent" (ngModelChange)="valueChange()"/>
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   </div>
 
