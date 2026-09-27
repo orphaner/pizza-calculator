@@ -50,9 +50,15 @@ until curl -s -o /dev/null http://localhost:4200/; do sleep 1; done
 
 Capture with Chrome headless driven over CDP at a real viewport (plain
 `--window-size` does NOT resize the layout viewport and produces misleading
-crops). Report the absolute file paths you wrote — do not try to describe what
-the images look like; someone else will open them. Kill the server and Chrome
-when done (`pkill -f "ng serve"`).
+crops). Capture the **full page**, not just the visible viewport — with
+Playwright that is `page.screenshot({ fullPage: true })`, over raw CDP it is
+`Page.captureScreenshot` with `captureBeyondViewport: true` and a clip whose
+height is `document.documentElement.scrollHeight`. A viewport-only capture hides
+everything below the fold, which is usually the part worth looking at.
+
+Report the absolute file paths you wrote — do not try to describe what the
+images look like; someone else will open them. Kill the server and Chrome when
+done (`pkill -f "ng serve"`).
 
 ## Reporting
 
