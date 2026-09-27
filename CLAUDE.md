@@ -30,11 +30,20 @@ npm run e2e                  # integration tests (Playwright, desktop + mobile)
 npm run lint                 # ESLint via Angular CLI (angular-eslint)
 ```
 
-## Running tests
-Delegate test runs to the **`test-runner` subagent** (`.claude/agents/test-runner.md`,
-Haiku, read-only tools) rather than running them inline — it reports pass/fail
-counts and, for failures, the test name, assertion and file:line. It does not
-fix anything; it reports back.
+## Running checks
+Delegate **every read-only verification** to the `test-runner` subagent
+(`.claude/agents/test-runner.md`, Haiku, read-only tools) rather than running it
+inline: unit tests, e2e tests, lint, production build, the Bootstrap
+compiled-CSS check, and responsive screenshot capture. It reports outcomes and,
+for failures, the test/file, the assertion with expected vs received, and the
+file:line — it never fixes anything.
+
+Keep *authoring* tests out of that agent. What makes a test here worth having is
+the judgement about what to assert (see the zoneless and vacuous-pass notes
+below), and that judgement is the part worth doing carefully.
+
+Note: subagent definitions are loaded at session start, so edits to that file
+only take effect in the next session.
 
 ## Integration tests (Playwright)
 - Config: `playwright.config.ts`, specs in `e2e/`. Two projects, `desktop`
