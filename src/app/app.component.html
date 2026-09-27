@@ -105,7 +105,13 @@
 
   <div class="row">
     <div class="col-12 col-lg-4">
-      <h5 class="mb-3">🥣 Pâte complète</h5>
+      <h5 class="mb-3">
+        @if (useBigga) {
+          🥣 Ingrédients totaux
+        } @else {
+          🥣 Pâte le jour même
+        }
+      </h5>
       <div class="ingredient-list">
         <div class="ingredient-row i-bg-flour">
           <i class="pz pz-flour"></i>

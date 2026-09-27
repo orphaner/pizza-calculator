@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-const SECTIONS = ['Pâte complète', 'Biga — la veille', 'Pâte finale — jour J'];
+const SECTIONS = ['Ingrédients totaux', 'Biga — la veille', 'Pâte finale — jour J'];
 
 function columnFor(page: Page, section: string) {
   return page.locator('.col-12', { has: page.getByRole('heading', { name: section }) });
