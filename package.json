@@ -7,6 +7,7 @@
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "test": "ng test",
+    "e2e": "playwright test",
     "lint": "ng lint"
   },
   "private": true,
@@ -28,6 +29,7 @@
     "@angular/compiler-cli": "^22.2.0",
     "@angular/language-service": "^22.2.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^24.13.6",
     "angular-eslint": "22.5.0",
     "eslint": "^10.9.1",

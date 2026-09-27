@@ -3,7 +3,7 @@
 Guidance for Claude Code when working in this repository.
 
 ## Project overview
-- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`unit-test` builders — all standalone, no NgModule), ESLint, Vitest, ngx-bootstrap, Bootstrap
+- Stack: Angular 22 (TypeScript), Angular CLI (esbuild-based `application`/`dev-server`/`unit-test` builders — all standalone, no NgModule), ESLint, Vitest (unit) + Playwright (integration), ngx-bootstrap, Bootstrap
 - Single standalone component: `src/app/app.component.ts` computes dough ingredient weights (flour/water/salt/yeast/olive oil) from portion counts and hydration parameters; bootstrapped directly via `bootstrapApplication` in `src/main.ts` (no `app.module.ts`)
 - **Zoneless**: no `zone.js`, `provideZonelessChangeDetection()` in `src/main.ts`. Change detection relies entirely on Angular's own event-binding notifications (`(ngModelChange)`, `(click)`, etc. all mark the view dirty on their own) — there is nothing to configure per-component for this to work, but any code that mutates component state from *outside* an Angular-triggered callback (raw `setTimeout`, a non-Angular event listener, a promise not awaited through Angular APIs) would silently fail to update the view and needs a manual `ChangeDetectorRef.markForCheck()`/signal.
 - Build output: `dist/pizza-calculator/browser` (path set in `angular.json`; the `application` builder nests output under `browser/` as of Angular 18)
@@ -26,8 +26,41 @@ npm run build                # dev build
 npm run build:prod           # production build (AOT, optimizations)
 npm test                     # unit tests (Vitest, watch mode)
 ng test --watch=false        # CI-style single run
+npm run e2e                  # integration tests (Playwright, desktop + mobile)
 npm run lint                 # ESLint via Angular CLI (angular-eslint)
 ```
+
+## Running tests
+Delegate test runs to the **`test-runner` subagent** (`.claude/agents/test-runner.md`,
+Haiku, read-only tools) rather than running them inline — it reports pass/fail
+counts and, for failures, the test name, assertion and file:line. It does not
+fix anything; it reports back.
+
+## Integration tests (Playwright)
+- Config: `playwright.config.ts`, specs in `e2e/`. Two projects, `desktop`
+  (Chrome) and `mobile` (Pixel 7, 412px), so every spec runs twice — 10 specs,
+  20 runs. Only Chromium is installed (`npx playwright install chromium`); the
+  `mobile` project uses a Chromium-backed device descriptor on purpose, to avoid
+  pulling in WebKit.
+- The config's `webServer` starts and stops `npm start` itself, and reuses an
+  already-running dev server outside CI. Never start one by hand for a test run.
+- `e2e/dough-calculator.spec.ts` covers the arithmetic through the UI: recompute
+  on portion change, flour + water = total, the biga split adding back up to the
+  complete dough, the checkbox showing/hiding the biga sections, and the flour
+  share moving flour between stages.
+- `e2e/layout.spec.ts` covers what unit tests structurally cannot: no horizontal
+  scroll, no wrapped label or clipped value, the total sitting below every
+  section, and sections stacking on mobile vs sitting side by side on desktop.
+  These formalise checks that were previously done by hand over CDP.
+- The layout specs inspect *every* `.ingredient-row`, so they would pass
+  vacuously on a blank page. `beforeEach` asserts a row is visible and one spec
+  asserts the exact row count (14) to keep that from happening — preserve those
+  guards when editing.
+- Suite was validated by mutation: changing the biga hydration from `* 0.5` to
+  `* 0.6` made exactly the biga-split spec fail (expected 146, got 175) while
+  the other 18 stayed green, which is the intended blast radius.
+- CI does not run any tests today — the workflow only builds and pushes the
+  Docker image. These suites are local-only until that changes.
 
 ## Docker
 ```bash
