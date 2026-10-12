@@ -80,8 +80,12 @@ only take effect in the next session.
 - Suite was validated by mutation: changing the biga hydration from `* 0.5` to
   `* 0.6` made exactly the biga-split spec fail (expected 146, got 175) while
   the other 18 stayed green, which is the intended blast radius.
-- CI does not run any tests today — the workflow only builds and pushes the
-  Docker image. These suites are local-only until that changes.
+- CI runs the whole suite (lint, unit, e2e) in the `test` job of
+  `.github/workflows/deploy.yml`, on pull requests and on push to `master`;
+  deployment waits for it. `playwright.config.ts` needed nothing for this: when
+  `CI` is set it starts its own dev server, forbids `test.only` and retries
+  failures twice. Traces of retried tests are uploaded as the
+  `playwright-test-results` artifact when the job fails.
 
 ## Settings UI (portions + dough parameters)
 - The two `<tabset>` tabs were replaced by three panels shown at once —
@@ -158,5 +162,7 @@ mise exec -- npx wrangler deploy --dry-run   # validate config + asset dir, no c
 
 ## CI
 - `.github/workflows/build.yml`: `actions/checkout@v7` → `docker/login-action@v4` → `docker/build-push-action@v7` (`push: true`), building and pushing to Docker Hub (`nicolaznk/pizza-calculator:latest`) on push/PR to `master`, using `DOCKER_USERNAME`/`DOCKER_PASSWORD` secrets.
-- `.github/workflows/deploy.yml`: on push to `master` → `jdx/mise-action@v5` (installs the Node pinned in `mise.toml`, keeping it the single source of truth) → `npm ci` → `npm run build:prod` → `cloudflare/wrangler-action@v4`, which reads `wrangler.jsonc`. Needs the `CLOUDFLARE_API_TOKEN` (custom token, Account → Workers Scripts → Edit, scoped to the one account) and `CLOUDFLARE_ACCOUNT_ID` secrets. Unlike `build.yml` it does not run on pull requests, since every run deploys to production.
+- `.github/workflows/deploy.yml`, two jobs, both getting Node from `jdx/mise-action@v5` (installs the version pinned in `mise.toml`, keeping it the single source of truth):
+  - `test`, on push and PR to `master`: `npm run lint` → `npm test -- --watch=false` → `npx playwright install --with-deps chromium` → `npm run e2e`.
+  - `deploy`, `needs: test` and only on push to `master`: `npm run build:prod` → `cloudflare/wrangler-action@v4`, which reads `wrangler.jsonc`. Needs the `CLOUDFLARE_API_TOKEN` (custom token, Account → Workers Scripts → Edit, scoped to the one account) and `CLOUDFLARE_ACCOUNT_ID` secrets. A failing test therefore blocks the deploy, and a PR shows red before merge rather than at deploy time.
 - The dead `node-version: [12.x]` strategy matrix (never referenced — no `actions/setup-node` step existed) was removed along with the old `@v1`/`@v2` action versions and the deprecated inline-credentials auth pattern.
