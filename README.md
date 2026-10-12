@@ -1,90 +1,91 @@
 # 🍕 Pizza Calculator
 
-Un calculateur intelligent d'ingrédients pour pâte à pizza, développé avec Angular. Ce projet vous aide à calculer les proportions parfaites d'ingrédients en fonction du nombre de portions désirées.
+Calcule le poids de chaque ingrédient d'une pâte à pizza à partir du nombre de pâtons voulus, avec ou sans biga.
+
+👉 **https://pizza.beroot.org**
 
 ## ✨ Fonctionnalités
 
-### 🎯 Calcul Intelligent
-- Calcul automatique des proportions de farine, eau, sel, levure et huile d'olive
-- Validation des entrées avec messages d'erreur informatifs
-- Calculs basés sur les ratios professionnels de boulangerie
+- **Portions** : nombre et poids des pâtons adultes et enfants.
+- **Paramètres de la pâte** : taux d'hydratation (%), levure, sel et huile d'olive (en g par kg de farine).
+- **Biga** (activée par défaut) : la part de farine qui part dans la biga (%), puis la recette en deux temps, la biga à préparer la veille et la pâte finale du jour J.
+- Recalcul instantané à chaque modification, sans bouton.
+- Responsive : les sections s'empilent sur mobile et se placent côte à côte sur grand écran.
 
-### 🍕 Styles de Pizza Prédéfinis
-- **Classique**: Pâte à pizza traditionnelle (56% hydratation)
-- **Napolitaine**: Style authentique napolitain (65% hydratation)
-- **New York**: Style new-yorkais avec plus d'huile (58% hydratation)
-- **Sicilienne**: Pâte épaisse sicilienne très huilée (70% hydratation)
+## 🧮 Le calcul
 
-### 💾 Gestion des Recettes
-- Sauvegarde de vos recettes personnalisées au format JSON
-- Chargement de recettes précédemment sauvegardées
-- Export facile pour partager vos créations
+Le poids total de pâte (somme des pâtons) est réparti entre farine et eau selon l'hydratation :
 
-### 📱 Design Moderne
-- Interface responsive optimisée pour mobile
-- Cartes d'ingrédients avec dégradés colorés et animations
-- Design moderne avec CSS Grid et Flexbox
+```
+farine = total / (1 + hydratation)
+eau    = total − farine
+```
 
-### 🔧 Fonctionnalités Techniques
-- TypeScript avec interfaces strictes
-- Validation complète des entrées utilisateur
-- Gestion d'erreurs robuste
-- Tests unitaires complets
-- Code bien documenté et maintenable
+Le sel, la levure et l'huile sont proportionnels à la farine, et **ne comptent pas** dans le poids total des pâtons.
+
+Avec la biga, la farine de biga correspond au pourcentage choisi de la farine totale. La biga est hydratée à 50 % (valeur fixe), et la levure se répartit au prorata de la farine. La pâte finale reçoit la biga entière, puis le reste de farine, d'eau et de levure, ainsi que tout le sel et toute l'huile.
 
 ## 🚀 Développement
 
 ### Prérequis
-- [mise](https://mise.jdx.dev/) pour gérer la version de Node.js (voir `mise.toml`)
-- npm
+- [mise](https://mise.jdx.dev/), qui installe la version de Node.js épinglée dans `mise.toml`.
 
 ### Installation
 ```bash
-mise install   # installe la version de Node.js définie dans mise.toml
-npm install
+mise install
+npm ci
 ```
 
 ### Serveur de développement
 ```bash
-npm start
+mise run start        # http://localhost:4200
+mise run start-lan    # accessible depuis le réseau local, pour tester sur mobile
 ```
-Naviguer vers `http://localhost:4200/`. L'application se recharge automatiquement lors des modifications.
 
 ### Build
 ```bash
-npm run build          # Build de développement
-npm run build:prod     # Build de production
+npm run build         # build de développement
+mise run build-prod   # build de production → dist/pizza-calculator/browser
 ```
 
-### Tests
+### Tests et qualité
 ```bash
-npm test              # Tests unitaires
-npm run e2e           # Tests end-to-end
+npm test                         # tests unitaires (Vitest, mode watch)
+npm test -- --watch=false        # une seule exécution
+mise run e2e                     # tests d'intégration Playwright (desktop + mobile)
+mise run e2e-ui                  # mode UI de Playwright, interactif
+npm run lint                     # ESLint
 ```
 
-## 🎨 Utilisation
+Les tests e2e démarrent eux-mêmes le serveur de développement. Ils n'utilisent que Chromium, à installer une fois avec `npx playwright install chromium`.
 
-1. **Configurer les portions**: Définissez le nombre et le poids des pâtons adultes et enfants
-2. **Choisir un style**: Sélectionnez un style de pizza prédéfini ou personnalisez les paramètres
-3. **Consulter les ingrédients**: Les proportions sont calculées automatiquement
-4. **Sauvegarder**: Exportez votre recette pour la réutiliser plus tard
+## ☁️ Déploiement
 
-## 🏗️ Architecture
+L'app est 100 % statique. Elle est servie par **Cloudflare Workers** (assets statiques, configuration dans `wrangler.jsonc`).
 
-- **Angular 9** avec Ivy renderer
-- **Bootstrap 4** pour le design responsive
-- **ngx-bootstrap** pour les composants UI
-- **TypeScript** avec typage strict
-- **SCSS** pour les styles avancés
+- **Automatique** : chaque push sur `master` lance lint, tests unitaires et tests e2e, puis déploie si tout passe (`.github/workflows/deploy.yml`). Les pull requests lancent les mêmes tests, sans déployer.
+- **Manuel** :
+  ```bash
+  mise run cf-login     # une fois par machine
+  mise run cf-dev       # sert le build de production en local, sur le runtime Workers
+  mise run cf-deploy    # build de production + déploiement
+  ```
 
-## 🤝 Contribution
+Pour héberger l'app soi-même, une image Docker (NGINX) est aussi disponible :
 
-Les contributions sont les bienvenues! N'hésitez pas à:
-- Signaler des bugs
-- Proposer de nouvelles fonctionnalités
-- Améliorer la documentation
-- Ajouter de nouveaux styles de pizza
+```bash
+docker build -t pizza-calculator:local .
+docker run --rm -p 8080:80 pizza-calculator:local   # http://localhost:8080
+```
+
+## 🏗️ Stack
+
+- **Angular 22**, composant standalone, sans zone.js (zoneless)
+- **Bootstrap 5** et SCSS
+- **TypeScript** en mode strict
+- **Vitest** (tests unitaires) et **Playwright** (tests d'intégration)
+- **Cloudflare Workers** (hébergement) et **GitHub Actions** (CI/CD)
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT.
+Ce projet est sous licence MIT, voir [LICENSE](LICENSE).
