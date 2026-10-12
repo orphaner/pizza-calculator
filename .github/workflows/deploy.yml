@@ -1,14 +1,14 @@
 # This workflow tests the app, then builds it and deploys it to Cloudflare Workers
 # (static assets), served at https://pizza.beroot.org — see wrangler.jsonc.
-# Tests run on pull requests too; deployment only happens on push to master.
+# Tests run on pull requests too; deployment only happens on push to main.
 
 name: Test and deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -43,7 +43,7 @@ jobs:
   deploy:
 
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-latest
 

@@ -63,7 +63,7 @@ Les tests e2e démarrent eux-mêmes le serveur de développement. Ils n'utilisen
 
 L'app est 100 % statique. Elle est servie par **Cloudflare Workers** (assets statiques, configuration dans `wrangler.jsonc`).
 
-- **Automatique** : chaque push sur `master` lance lint, tests unitaires et tests e2e, puis déploie si tout passe (`.github/workflows/deploy.yml`). Les pull requests lancent les mêmes tests, sans déployer.
+- **Automatique** : chaque push sur `main` lance lint, tests unitaires et tests e2e, puis déploie si tout passe (`.github/workflows/deploy.yml`). Les pull requests lancent les mêmes tests, sans déployer.
 - **Manuel** :
   ```bash
   mise run cf-login     # une fois par machine
