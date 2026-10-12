@@ -1,0 +1,39 @@
+[tools]
+node = "24.21.0"
+
+[env]
+DOCKER_NAMESPACE = "nicolaznk"
+IMAGE_NAME = "pizza-calculator"
+
+[tasks.start]
+description = "Démarre le serveur de développement (ng serve)"
+run = "npm start"
+
+[tasks."start-lan"]
+description = "Démarre le serveur de dev accessible depuis le réseau local (test sur mobile)"
+run = """
+ip=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo localhost)
+echo "Accessible depuis le réseau local : http://$ip:4200"
+npm start -- --host 0.0.0.0
+"""
+
+[tasks."docker-build"]
+description = "Build l'image Docker de production (sans cache)"
+run = "docker image build --no-cache -t $DOCKER_NAMESPACE/$IMAGE_NAME:latest ."
+
+[tasks."docker-push"]
+description = "Push l'image Docker de production sur Docker Hub"
+depends = ["docker-build"]
+run = "docker push $DOCKER_NAMESPACE/$IMAGE_NAME:latest"
+
+[tasks."e2e"]
+description = "Lance les tests d'intégration Playwright (desktop + mobile)"
+run = "npm run e2e"
+
+[tasks."e2e-ui"]
+description = "Ouvre le mode UI de Playwright (exécution pas à pas, time-travel, watch)"
+run = "npm run e2e:ui"
+
+[tasks."e2e-report"]
+description = "Ouvre le rapport HTML du dernier run Playwright"
+run = "npm run e2e:report"
