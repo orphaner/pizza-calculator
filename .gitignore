@@ -48,6 +48,9 @@ testem.log
 /blob-report
 /playwright/.cache
 
+# Cloudflare Wrangler (local state of `wrangler dev`)
+/.wrangler
+
 # System Files
 .DS_Store
 Thumbs.db

@@ -1,0 +1,11 @@
+{
+  "name": "pizza-calculator",
+  "compatibility_date": "2026-10-12",
+  "assets": {
+    "directory": "./dist/pizza-calculator/browser/"
+  },
+  "routes": [
+    { "pattern": "pizza.beroot.org", "custom_domain": true }
+  ],
+  "workers_dev": false
+}

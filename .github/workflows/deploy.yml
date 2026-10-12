@@ -1,0 +1,28 @@
+# This workflow builds the app and deploys it to Cloudflare Workers (static assets),
+# served at https://pizza.beroot.org — see wrangler.jsonc.
+
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    # Installs the Node version pinned in mise.toml (single source of truth).
+    - uses: jdx/mise-action@v5
+
+    - run: npm ci
+
+    - run: npm run build:prod
+
+    - uses: cloudflare/wrangler-action@v4
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

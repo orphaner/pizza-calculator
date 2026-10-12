@@ -26,6 +26,24 @@ description = "Push l'image Docker de production sur Docker Hub"
 depends = ["docker-build"]
 run = "docker push $DOCKER_NAMESPACE/$IMAGE_NAME:latest"
 
+[tasks."build-prod"]
+description = "Build de production (AOT, optimisations)"
+run = "npm run build:prod"
+
+[tasks."cf-login"]
+description = "Authentifie wrangler auprès de Cloudflare (OAuth navigateur)"
+run = "npx wrangler login"
+
+[tasks."cf-dev"]
+description = "Sert le build de production via le runtime Workers (wrangler dev)"
+depends = ["build-prod"]
+run = "npx wrangler dev"
+
+[tasks."cf-deploy"]
+description = "Déploie le build de production sur Cloudflare Workers"
+depends = ["build-prod"]
+run = "npx wrangler deploy"
+
 [tasks."e2e"]
 description = "Lance les tests d'intégration Playwright (desktop + mobile)"
 run = "npm run e2e"
