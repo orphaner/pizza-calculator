@@ -76,6 +76,13 @@ only take effect in the next session.
   would pass vacuously on a blank page. `beforeEach` asserts a row of each kind
   is visible and two specs assert the exact row counts (14 and 7) to keep that
   from happening — preserve those guards when editing.
+- `e2e/icons.spec.ts` checks that every icon and the manifest that
+  `index.html` links to, plus the icons the manifest lists, are actually served.
+  Each of those files must be listed in `angular.json` `assets`, or it silently
+  stays out of the build — which is how five of them 404'd in production for
+  years while build, lint and tests were all green. The spec also rejects a
+  `text/html` answer, so a SPA fallback cannot pass for a served file. Add any
+  new icon to both `index.html` and `assets`.
 - Suite was validated by mutation: changing the biga hydration from `* 0.5` to
   `* 0.6` made exactly the biga-split spec fail (expected 146, got 175) while
   all the others stayed green, which is the intended blast radius.
