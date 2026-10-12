@@ -51,9 +51,8 @@ only take effect in the next session.
 
 ## Integration tests (Playwright)
 - Config: `playwright.config.ts`, specs in `e2e/`. Two projects, `desktop`
-  (Chrome) and `mobile` (Pixel 7, 412px), so every spec runs twice — 12 specs,
-  24 runs. Only Chromium is installed (`npx playwright install chromium`); the
-  `mobile` project uses a Chromium-backed device descriptor on purpose, to avoid
+  (Chrome) and `mobile` (Pixel 7, 412px), so every spec runs twice. Only
+  Chromium is installed (`npx playwright install chromium`); the `mobile` project uses a Chromium-backed device descriptor on purpose, to avoid
   pulling in WebKit.
 - The config's `webServer` starts and stops `npm start` itself, and reuses an
   already-running dev server outside CI. Never start one by hand for a test run.
@@ -79,7 +78,7 @@ only take effect in the next session.
   from happening — preserve those guards when editing.
 - Suite was validated by mutation: changing the biga hydration from `* 0.5` to
   `* 0.6` made exactly the biga-split spec fail (expected 146, got 175) while
-  the other 18 stayed green, which is the intended blast radius.
+  all the others stayed green, which is the intended blast radius.
 - CI runs the whole suite (lint, unit, e2e) in the `test` job of
   `.github/workflows/deploy.yml`, on pull requests and on push to `master`;
   deployment waits for it. `playwright.config.ts` needed nothing for this: when
