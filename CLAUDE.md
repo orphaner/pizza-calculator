@@ -150,6 +150,9 @@ mise run docker-push          # push nicolaznk/pizza-calculator:latest (requires
 - No `not_found_handling`: the app has no router, everything lives on `/`. Set it to `"single-page-application"` if a router is ever added.
 - The custom domain is declared in `wrangler.jsonc` (`routes` + `custom_domain: true`): wrangler creates the DNS record and certificate in the `beroot.org` zone itself. It fails if a record already exists on `pizza`. `workers_dev: false` disables the `*.workers.dev` URL.
 - `wrangler deploy` with a bare directory (no config file) only works interactively, not in CI — which is why the config is committed.
+- The CI API token (`CLOUDFLARE_API_TOKEN`, named `github-actions-pizza-calculator`) has two policies, both needed:
+  - the Workers **Editor** role, scoped to the `pizza-calculator` Worker only. The legacy "Workers Scripts → Edit" permission is what this replaces; a per-Worker scope can only be granted once the Worker exists, which the first manual `cf-deploy` took care of.
+  - **Workers Routes → Edit** on the `beroot.org` zone. wrangler re-syncs the custom domain on *every* deploy, even when it is unchanged, so without zone access the code uploads but the job fails with `The zone "pizza.beroot.org" does not exist on your account. [code: 10084]`. In the token editor this permission only appears once the policy's scope selector is switched from "Entire Account" to the zone.
 
 ```bash
 mise run cf-login            # OAuth in the browser, once per machine (interactive)
@@ -163,5 +166,5 @@ mise exec -- npx wrangler deploy --dry-run   # validate config + asset dir, no c
 - `.github/workflows/build.yml`: `actions/checkout@v7` → `docker/login-action@v4` → `docker/build-push-action@v7` (`push: true`), building and pushing to Docker Hub (`nicolaznk/pizza-calculator:latest`) on push/PR to `main`, using `DOCKER_USERNAME`/`DOCKER_PASSWORD` secrets.
 - `.github/workflows/deploy.yml`, two jobs, both getting Node from `jdx/mise-action@v5` (installs the version pinned in `mise.toml`, keeping it the single source of truth):
   - `test`, on push and PR to `main`: `npm run lint` → `npm test -- --watch=false` → `npx playwright install --with-deps chromium` → `npm run e2e`.
-  - `deploy`, `needs: test` and only on push to `main`: `npm run build:prod` → `cloudflare/wrangler-action@v4`, which reads `wrangler.jsonc`. Needs the `CLOUDFLARE_API_TOKEN` (custom token, Account → Workers Scripts → Edit, scoped to the one account) and `CLOUDFLARE_ACCOUNT_ID` secrets. A failing test therefore blocks the deploy, and a PR shows red before merge rather than at deploy time.
+  - `deploy`, `needs: test` and only on push to `main`: `npm run build:prod` → `cloudflare/wrangler-action@v4`, which reads `wrangler.jsonc`. Needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets. A failing test therefore blocks the deploy, and a PR shows red before merge rather than at deploy time.
 - The dead `node-version: [12.x]` strategy matrix (never referenced — no `actions/setup-node` step existed) was removed along with the old `@v1`/`@v2` action versions and the deprecated inline-credentials auth pattern.
